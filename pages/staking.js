@@ -53,13 +53,11 @@ export default function StakingCalculator() {
 
   return (
     <Layout>
-      <section className="hero">
+      <section>
         <h2>Calcolatore di Rendimento Staking</h2>
         <p>Inserisci i dati e scopri il rendimento stimato con grafico.</p>
-      </section>
 
-      <section className="features">
-        <div style={{ flex: "1", padding: "1rem" }}>
+        <div style={{ maxWidth: "500px", marginBottom: "2rem" }}>
           <label>Capitale iniziale (USD):</label>
           <input
             type="number"
@@ -96,14 +94,32 @@ export default function StakingCalculator() {
           </h3>
         </div>
 
-        <div style={{ width: "100%", height: 400, marginTop: "2rem" }}>
+        <div style={{ width: "100%", height: 400 }}>
           <ResponsiveContainer>
             <LineChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="day" label={{ value: "Giorni", position: "insideBottomRight", offset: -5 }} />
-              <YAxis label={{ value: "Valore (USD)", angle: -90, position: "insideLeft" }} />
+              <XAxis
+                dataKey="day"
+                label={{
+                  value: "Giorni",
+                  position: "insideBottomRight",
+                  offset: -5,
+                }}
+              />
+              <YAxis
+                label={{
+                  value: "Valore (USD)",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
               <Tooltip />
-              <Line type="monotone" dataKey="value" stroke="#00ffcc" strokeWidth={2} />
+              <Line
+                type="monotone"
+                dataKey="value"
+                stroke="#00ffcc"
+                strokeWidth={2}
+              />
             </LineChart>
           </ResponsiveContainer>
         </div>
