@@ -13,6 +13,7 @@ export default function Layout({ children }) {
           <a href="/rendita">Rendita Crypto</a>
           <a href="/var">Value at Risk</a>
           <a href="/pensione">Pensione Crypto</a>
+          <a href="/confronto">Confronto DeFi vs TradFi</a>
         </nav>
       </header>
 
