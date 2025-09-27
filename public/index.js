@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Attuario - Analisi e Consulenza</title>
+  <title>Crypto-Attuario</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
   <header>
-    <h1>Attuario.eu</h1>
+    <h1>Crypto-Attuario</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="blog.html">Blog</a>
@@ -18,28 +18,28 @@
 
   <main>
     <section class="hero">
-      <h2>Analisi attuariale, finanza e innovazione</h2>
-      <p>Uno spazio dedicato a consulenza, ricerca e applicazioni nel mondo attuariale e finanziario.</p>
+      <h2>Finanza decentralizzata con approccio attuariale</h2>
+      <p>Analisi, modelli quantitativi e valutazioni del rischio applicati al mondo crypto e blockchain.</p>
     </section>
 
     <section class="features">
       <div>
-        <h3>📊 Analisi attuariale</h3>
-        <p>Approfondimenti su calcoli di rendite, pensioni, assicurazioni e valutazioni finanziarie.</p>
+        <h3>🔐 DeFi & Rischio</h3>
+        <p>Studio delle piattaforme di finanza decentralizzata con metriche di rischio innovative.</p>
       </div>
       <div>
-        <h3>💡 Ricerca e didattica</h3>
-        <p>Contenuti per studenti, ricercatori e professionisti: articoli, script, materiali di studio.</p>
+        <h3>📈 Modelli attuariali</h3>
+        <p>Applicazioni dei modelli di mortalità, stocastici e di pricing al settore crypto.</p>
       </div>
       <div>
-        <h3>🌍 Applicazioni pratiche</h3>
-        <p>Strumenti e calcolatori online per supportare decisioni in ambito economico-finanziario.</p>
+        <h3>🪙 Analisi mercati digitali</h3>
+        <p>Approfondimenti su tokenomics, NFT e stablecoin da prospettiva attuariale.</p>
       </div>
     </section>
   </main>
 
   <footer>
-    <p>© 2025 Attuario.eu - Tutti i diritti riservati</p>
+    <p>© 2025 Crypto-Attuario - Tutti i diritti riservati</p>
   </footer>
 </body>
 </html>
