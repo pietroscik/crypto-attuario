@@ -1,5 +1,15 @@
 import { useState } from "react";
 import Layout from "../components/Layout";
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ReferenceLine,
+  ResponsiveContainer,
+} from "recharts";
 
 export default function ValueAtRisk() {
   const [capital, setCapital] = useState(10000);
@@ -8,7 +18,6 @@ export default function ValueAtRisk() {
   const [days, setDays] = useState(1);
   const [confidence, setConfidence] = useState(95);
 
-  // quantili z per confidenza
   const zValues = {
     95: 1.65,
     99: 2.33,
@@ -18,13 +27,32 @@ export default function ValueAtRisk() {
     const mu = mean / 100;
     const sigma = volatility / 100;
     const z = zValues[confidence] || 1.65;
-
-    // formula VaR parametric: capitale * (mu - z*sigma*sqrt(t))
     const t = Math.sqrt(days);
     const varValue = capital * (mu - z * sigma * t);
-
-    return varValue.toFixed(2);
+    return varValue;
   };
+
+  // Generazione dati distribuzione normale per grafico
+  const generateChartData = () => {
+    const mu = mean / 100;
+    const sigma = volatility / 100;
+    const t = Math.sqrt(days);
+
+    const data = [];
+    for (let x = -4; x <= 4; x += 0.2) {
+      const prob =
+        (1 / (sigma * Math.sqrt(2 * Math.PI))) *
+        Math.exp(-0.5 * Math.pow((x - mu) / sigma, 2));
+      data.push({
+        rendimento: (x * 100).toFixed(2), // % rendimento
+        probabilita: prob.toFixed(4),
+      });
+    }
+    return data;
+  };
+
+  const varValue = calculateVaR();
+  const chartData = generateChartData();
 
   return (
     <Layout>
@@ -76,9 +104,46 @@ export default function ValueAtRisk() {
           <h3>
             VaR stimato:{" "}
             <span style={{ color: "red" }}>
-              ${Math.abs(calculateVaR())}
+              ${Math.abs(varValue).toFixed(2)}
             </span>
           </h3>
+        </div>
+
+        <div style={{ width: "100%", height: 400 }}>
+          <ResponsiveContainer>
+            <LineChart data={chartData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis
+                dataKey="rendimento"
+                label={{
+                  value: "Rendimento (%)",
+                  position: "insideBottomRight",
+                  offset: -5,
+                }}
+              />
+              <YAxis
+                label={{
+                  value: "Densità",
+                  angle: -90,
+                  position: "insideLeft",
+                }}
+              />
+              <Tooltip />
+              <Line
+                type="monotone"
+                dataKey="probabilita"
+                stroke="#00ffcc"
+                strokeWidth={2}
+                dot={false}
+              />
+              {/* Linea verticale per VaR */}
+              <ReferenceLine
+                x={(-confidence).toString()}
+                stroke="red"
+                label={{ value: `VaR ${confidence}%`, angle: -90, position: "insideTop" }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
         </div>
       </section>
     </Layout>
