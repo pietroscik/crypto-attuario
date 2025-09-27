@@ -3,19 +3,20 @@ body {
   margin: 0;
   padding: 0;
   line-height: 1.6;
-  background: #f8f9fa;
-  color: #333;
+  background: #0d0d0d;
+  color: #e0e0e0;
 }
 
 header {
-  background: #003366;
-  color: white;
+  background: #121212;
+  color: #00ffcc;
   padding: 1rem;
   text-align: center;
 }
 
 header h1 {
   margin: 0;
+  font-size: 1.8rem;
 }
 
 nav {
@@ -23,19 +24,21 @@ nav {
 }
 
 nav a {
-  color: white;
+  color: #00ffcc;
   text-decoration: none;
   margin: 0 10px;
+  font-weight: bold;
 }
 
 nav a:hover {
-  text-decoration: underline;
+  color: #ff33cc;
 }
 
 .hero {
-  background: #eaf2f8;
+  background: linear-gradient(135deg, #1a1a1a, #2d0033);
   padding: 2rem;
   text-align: center;
+  color: #ffffff;
 }
 
 .features {
@@ -49,42 +52,14 @@ nav a:hover {
   flex: 1;
   margin: 10px;
   padding: 1rem;
-  background: white;
+  background: #1a1a1a;
   border-radius: 8px;
-  box-shadow: 0 0 5px rgba(0,0,0,0.1);
-}
-
-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 500px;
-  margin: auto;
-}
-
-form label {
-  margin-top: 10px;
-}
-
-form input, form textarea, form button {
-  padding: 10px;
-  margin-top: 5px;
-}
-
-form button {
-  background: #003366;
-  color: white;
-  border: none;
-  cursor: pointer;
-  margin-top: 15px;
-}
-
-form button:hover {
-  background: #0055a5;
+  box-shadow: 0 0 10px rgba(0,255,204,0.3);
 }
 
 footer {
-  background: #003366;
-  color: white;
+  background: #121212;
+  color: #00ffcc;
   text-align: center;
   padding: 1rem;
   margin-top: 2rem;
