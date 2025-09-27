@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Collabora con noi - Attuario.eu</title>
+  <title>Collabora con noi - Crypto-Attuario</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -18,17 +18,17 @@
 
   <main>
     <section>
-      <h2>Spazi pubblicitari e sponsorizzazioni</h2>
-      <p>Sei un’azienda, università o startup? Puoi collaborare con noi attraverso:</p>
+      <h2>Sponsorizzazioni Crypto</h2>
+      <p>Vuoi promuovere la tua piattaforma, exchange o startup blockchain? Offriamo:</p>
       <ul>
-        <li>✅ Banner sul sito</li>
+        <li>✅ Banner promozionali</li>
         <li>✅ Articoli sponsorizzati</li>
-        <li>✅ Collaborazioni su contenuti tecnici</li>
+        <li>✅ Recensioni e analisi tecniche</li>
       </ul>
     </section>
 
     <section>
-      <h2>Contattaci</h2>
+      <h2>Richiedi informazioni</h2>
       <form>
         <label for="name">Nome:</label>
         <input type="text" id="name" name="name" required>
@@ -45,7 +45,7 @@
   </main>
 
   <footer>
-    <p>© 2025 Attuario.eu</p>
+    <p>© 2025 Crypto-Attuario</p>
   </footer>
 </body>
 </html>
