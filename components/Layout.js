@@ -11,6 +11,7 @@ export default function Layout({ children }) {
           <a href="/staking">Calcolatore Staking</a>
           <a href="/staking">Calcolatore Staking</a>
           <a href="/rendita">Rendita Crypto</a>
+          <a href="/var">Value at Risk</a>
         </nav>
       </header>
 
