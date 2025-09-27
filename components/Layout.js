@@ -9,7 +9,8 @@ export default function Layout({ children }) {
           <a href="/blog">Blog</a>
           <a href="/sponsor">Collabora</a>
           <a href="/staking">Calcolatore Staking</a>
-<a href="/staking">Calcolatore Staking</a>
+          <a href="/staking">Calcolatore Staking</a>
+          <a href="/rendita">Rendita Crypto</a>
         </nav>
       </header>
 
