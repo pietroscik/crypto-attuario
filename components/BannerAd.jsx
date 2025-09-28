@@ -1,24 +1,22 @@
 import { useEffect } from "react";
 
-export default function BannerAd({ slot, format = "auto", responsive = "true" }) {
+export default function AdBanner() {
   useEffect(() => {
     try {
-      if (window.adsbygoogle) {
-        window.adsbygoogle.push({});
-      }
+      (window.adsbygoogle = window.adsbygoogle || []).push({});
     } catch (e) {
-      console.log("Adsense error:", e);
+      console.error("Adsense error", e);
     }
   }, []);
 
   return (
     <ins
       className="adsbygoogle"
-      style={{ display: "block", textAlign: "center", margin: "20px 0" }}
+      style={{ display: "block" }}
       data-ad-client="ca-pub-8531177897035530"
-      data-ad-slot={slot}     // ← qui va il codice slot che AdSense ti fornirà
-      data-ad-format={format}
-      data-full-width-responsive={responsive}
+      data-ad-slot="2583059282"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
     ></ins>
   );
 }
