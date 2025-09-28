@@ -1,42 +1,66 @@
 export default function Home() {
   return (
     <>
-      <header>
+      <header className="header">
         <h1>Crypto-Attuario</h1>
         <nav>
           <a href="/">Home</a>
           <a href="/blog">Blog</a>
           <a href="/sponsor">Collabora</a>
+          <a href="/staking">Staking</a>
+          <a href="/rendita">Rendita</a>
+          <a href="/var">VaR</a>
+          <a href="/pensione">Pensione</a>
+          <a href="/confronto">DeFi vs TradFi</a>
+          <a href="/defi">Analisi DeFi</a>
         </nav>
       </header>
 
       <main>
+        {/* Hero */}
         <section className="hero">
-          <h2>Finanza decentralizzata con approccio attuariale</h2>
+          <h2>Finanza Decentralizzata con Metodo Attuariale</h2>
           <p>
-            Analisi, modelli quantitativi e valutazione del rischio applicati al mondo crypto
-            e blockchain.
+            Un approccio scientifico alla valutazione del rischio e alle opportunità
+            della blockchain e della DeFi.
           </p>
+          <a href="/staking" className="cta-btn">Inizia Ora</a>
         </section>
 
-        <section className="features">
-          <div>
-            <h3>🔐 DeFi & Rischio</h3>
-            <p>Studio delle piattaforme DeFi con metriche di rischio attuariale.</p>
-          </div>
-          <div>
-            <h3>📈 Modelli attuariali</h3>
-            <p>Applicazioni dei modelli stocastici al settore crypto.</p>
-          </div>
-          <div>
-            <h3>🪙 Analisi mercati digitali</h3>
-            <p>Approfondimenti su tokenomics, NFT e stablecoin da prospettiva attuariale.</p>
+        {/* Servizi */}
+        <section className="services">
+          <h2>I nostri strumenti</h2>
+          <div className="grid">
+            <div className="card">
+              <h3>🔐 Staking</h3>
+              <p>Calcolatore di rendimento con o senza interessi composti.</p>
+            </div>
+            <div className="card">
+              <h3>📊 Rendita</h3>
+              <p>Analisi e simulazione di flussi di rendita crypto.</p>
+            </div>
+            <div className="card">
+              <h3>📉 Value at Risk</h3>
+              <p>Misura la perdita massima attesa con metodi attuariali.</p>
+            </div>
+            <div className="card">
+              <h3>🏦 Pensione Crypto</h3>
+              <p>Proiezioni pensionistiche basate su asset digitali.</p>
+            </div>
+            <div className="card">
+              <h3>⚖️ Confronto DeFi/TradFi</h3>
+              <p>Analisi comparativa tra mercati decentralizzati e tradizionali.</p>
+            </div>
+            <div className="card">
+              <h3>📈 Analisi DeFi</h3>
+              <p>Dashboard sui principali protocolli: Aave, Lido, Curve, Uniswap.</p>
+            </div>
           </div>
         </section>
       </main>
 
       <footer>
-        <p>© 2025 Crypto-Attuario</p>
+        <p>© 2025 Crypto-Attuario • Ricerca e analisi quantitative</p>
       </footer>
     </>
   );
