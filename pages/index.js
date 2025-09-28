@@ -14,6 +14,8 @@ export default function Home() {
           <a href="/confronto">DeFi vs TradFi</a>
           <a href="/defi">Analisi DeFi</a>
         </nav>
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8531177897035530"
+     crossorigin="anonymous"></script>
       </header>
 
       <main>
