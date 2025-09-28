@@ -1,44 +1,8 @@
-import Head from "next/head";
-
 import AdBanner from "../components/AdBanner";
 
-export default function Home() {
+function Home() {
   return (
     <>
-      <header className="header">
-        <h1>Crypto-Attuario</h1>
-      </header>
-
-      <main>
-        <section className="hero">
-          <h2>Benvenuto su Crypto-Attuario</h2>
-          <p>Analisi quantitativa della DeFi con metodo attuariale</p>
-        </section>
-
-        {/* Qui appare il banner AdSense */}
-        <AdBanner />
-      </main>
-    </>
-  );
-}
-export default function Home() {
-  return (
-    <>
-      <Head>
-        {/* Verifica proprietà AdSense */}
-        <meta
-          name="google-adsense-account"
-          content="ca-pub-8531177897035530"
-        />
-
-        {/* Script AdSense */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8531177897035530"
-          crossOrigin="anonymous"
-        ></script>
-      </Head>
-
       <header className="header">
         <h1>Crypto-Attuario</h1>
         <nav>
@@ -59,11 +23,14 @@ export default function Home() {
         <section className="hero">
           <h2>Finanza Decentralizzata con Metodo Attuariale</h2>
           <p>
-            Un approccio scientifico alla valutazione del rischio e alle opportunità
-            della blockchain e della DeFi.
+            Un approccio scientifico alla valutazione del rischio e alle
+            opportunità della blockchain e della DeFi.
           </p>
           <a href="/staking" className="cta-btn">Inizia Ora</a>
         </section>
+
+        {/* Banner pubblicitario */}
+        <AdBanner />
 
         {/* Servizi */}
         <section className="services">
@@ -103,3 +70,5 @@ export default function Home() {
     </>
   );
 }
+
+export default Home;
