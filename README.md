@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<h1 align="center">Crypto-Attuario</h1>
 
-## Getting Started
+Applicazione informativa e di ricerca dedicata all'analisi attuariale nel mondo crypto e DeFi. Il progetto raccoglie strumenti interattivi (calcolatori di staking, rendita, VaR), dashboard dedicate ai protocolli più rilevanti e contenuti editoriali per professionisti di risk management, assicurazioni e investitori istituzionali.
 
-First, run the development server:
+## 🚀 Funzionalità principali
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Homepage editoriale** con mission, statistiche sintetiche e call-to-action verso gli strumenti disponibili.
+- **Blog tematico** con percorsi di lettura, anteprime di articoli e invito alla collaborazione della community attuariale.
+- **Strumenti quantitativi**: calcolo staking, planner di rendita, Value at Risk e simulazioni pensionistiche basate su asset digitali.
+- **Schede protocolli DeFi** con dati, risk assessment e confronto con alternative di mercato.
+- **Integrazione AdSense** centralizzata tramite layout condiviso.
+
+## 🧱 Struttura del progetto
+
+```
+.
+├── components/         # Layout, banner pubblicitari, template protocolli
+├── data/               # Dataset statici (protocolli, anteprime articoli)
+├── pages/              # Pagine Next.js (home, blog, strumenti, protocolli)
+├── public/             # Asset statici
+└── styles/             # Stili globali
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🛠️ Tecnologie
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- [Next.js](https://nextjs.org/) con routing basato su file (`pages/`)
+- React + Hooks per la logica dei calcolatori
+- [Recharts](https://recharts.org/en-US/) per i grafici del calcolatore di staking
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ▶️ Avvio del progetto
 
-## Learn More
+1. Installare le dipendenze (una sola volta):
 
-To learn more about Next.js, take a look at the following resources:
+   ```bash
+   npm install
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. Avviare il server di sviluppo:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+   ```bash
+   npm run dev
+   ```
 
-## Deploy on Vercel
+3. Aprire [http://localhost:3000](http://localhost:3000) per visualizzare il sito.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 📬 Contributi
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Le proposte di nuovi articoli, dataset o strumenti sono benvenute. Apri una issue o invia una pull request indicando il contesto attuariale/finanziario di riferimento.
+
+## ⚠️ Disclaimer
+
+Le informazioni presenti nel sito hanno finalità esclusivamente educative e divulgative. Non costituiscono consulenza finanziaria, fiscale o assicurativa.
+

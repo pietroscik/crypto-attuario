@@ -12,6 +12,11 @@ body {
   line-height: 1.6;
 }
 
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
 /* Header e Navbar */
 header {
   background: #111;
@@ -19,6 +24,7 @@ header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 1.5rem;
   box-shadow: 0 2px 6px rgba(0, 255, 204, 0.1);
 }
 
@@ -27,15 +33,23 @@ header h1 {
   font-size: 1.8rem;
 }
 
+nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
 nav a {
-  margin-left: 1rem;
-  text-decoration: none;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid transparent;
   color: #f1f1f1;
-  transition: color 0.2s ease;
+  transition: color 0.2s ease, border 0.2s ease;
 }
 
 nav a:hover {
   color: #00ffcc;
+  border-color: rgba(0, 255, 204, 0.4);
 }
 
 /* Sezioni principali */
@@ -50,17 +64,19 @@ section {
 }
 
 /* Titoli */
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   margin-bottom: 1rem;
 }
 
 h1 {
-  font-size: 2.2rem;
+  font-size: 2.4rem;
   color: #00ffcc;
 }
 
 h2 {
-  font-size: 1.6rem;
+  font-size: 1.8rem;
   color: #00ffcc;
 }
 
@@ -69,27 +85,247 @@ h3 {
   color: #00ffcc;
 }
 
-/* Card generiche */
+/* Hero e call-to-action */
+.hero {
+  display: grid;
+  gap: 2rem;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.hero-content h2 {
+  font-size: 2.4rem;
+  margin-bottom: 1rem;
+}
+
+.hero-content p {
+  font-size: 1.05rem;
+  color: #d0f4ec;
+  max-width: 640px;
+}
+
+.hero-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.cta-btn,
+.secondary-btn,
+.newsletter button,
+.newsletter-form button,
+.pill {
+  border: none;
+  border-radius: 999px;
+  padding: 0.75rem 1.6rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.cta-btn {
+  background: linear-gradient(135deg, #00ffcc, #00b3ff);
+  color: #0a0a0a;
+}
+
+.secondary-btn {
+  background: transparent;
+  border: 1px solid #00ffcc;
+  color: #00ffcc;
+}
+
+.cta-btn:hover,
+.secondary-btn:hover,
+.newsletter button:hover,
+.newsletter-form button:hover,
+.pill:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 255, 204, 0.2);
+}
+
+.stats-grid {
+  display: grid;
+  gap: 1.25rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.stat-card h3 {
+  color: #f1f1f1;
+  font-size: 1.2rem;
+}
+
+.stat-card p {
+  color: #b6fff0;
+}
+
+/* Card e griglie */
 .card {
   background: #111;
   padding: 1.2rem;
-  border-radius: 10px;
-  box-shadow: 0 0 8px rgba(0, 255, 204, 0.25);
-  transition: transform 0.2s ease;
+  border-radius: 12px;
+  box-shadow: 0 0 12px rgba(0, 255, 204, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  display: grid;
+  gap: 0.75rem;
 }
 
 .card:hover {
   transform: translateY(-3px);
+  box-shadow: 0 12px 28px rgba(0, 255, 204, 0.25);
 }
 
-/* Grid responsive */
 .grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1.5rem;
 }
 
-/* Tabella rischi */
+.two-columns {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.link-card {
+  position: relative;
+  gap: 0.75rem;
+}
+
+.link-card .icon {
+  font-size: 2rem;
+}
+
+.section-title {
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+.section-subtitle {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: #b6fff0;
+}
+
+.pill {
+  background: rgba(0, 255, 204, 0.18);
+  color: #00ffcc;
+  font-size: 0.85rem;
+}
+
+.pill-light {
+  background: rgba(0, 255, 204, 0.3);
+  color: #0a0a0a;
+}
+
+.pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+/* Blog */
+.page-hero {
+  margin-bottom: 2.5rem;
+}
+
+.page-hero p {
+  max-width: 720px;
+  color: #d0f4ec;
+}
+
+.hero-list {
+  margin-top: 1.5rem;
+  list-style: none;
+  display: grid;
+  gap: 0.6rem;
+}
+
+.blog-grid {
+  margin-top: 2rem;
+}
+
+.blog-card header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.tag {
+  background: rgba(0, 179, 255, 0.18);
+  color: #7adeff;
+  border-radius: 999px;
+  padding: 0.35rem 0.8rem;
+  font-size: 0.75rem;
+}
+
+.card-footer {
+  margin-top: 1.2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.read-time {
+  color: #93c8ff;
+  font-size: 0.85rem;
+}
+
+.callout {
+  margin-top: 3rem;
+  display: flex;
+  justify-content: center;
+}
+
+/* Newsletter */
+.newsletter {
+  text-align: center;
+  background: linear-gradient(135deg, rgba(0, 255, 204, 0.12), rgba(0, 179, 255, 0.12));
+  padding: 2.5rem 1.5rem;
+  border-radius: 16px;
+  margin-top: 3rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.newsletter-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
+}
+
+.newsletter input,
+.newsletter-form input {
+  padding: 0.75rem 1rem;
+  border-radius: 999px;
+  border: 1px solid rgba(0, 255, 204, 0.4);
+  background: rgba(10, 10, 10, 0.8);
+  color: #f1f1f1;
+  min-width: 260px;
+}
+
+.newsletter button,
+.newsletter-form button {
+  background: #00ffcc;
+  color: #0a0a0a;
+}
+
+.newsletter small {
+  color: #d0f4ec;
+}
+
+/* Tabelle */
 .table {
   width: 100%;
   border-collapse: collapse;
@@ -120,8 +356,43 @@ h3 {
 footer {
   background: #111;
   text-align: center;
-  padding: 1rem;
-  margin-top: 2rem;
+  padding: 1.5rem;
+  margin-top: 2.5rem;
   color: #888;
   font-size: 0.9rem;
+  display: grid;
+  gap: 0.5rem;
 }
+
+/* Responsività */
+@media (max-width: 900px) {
+  header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  nav {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 768px) {
+  .hero {
+    grid-template-columns: 1fr;
+  }
+
+  main {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 520px) {
+  nav {
+    gap: 0.5rem;
+  }
+
+  nav a {
+    padding: 0.3rem 0.6rem;
+  }
+}
+

@@ -1,22 +1,22 @@
 import ProtocolPage from "../../components/ProtocolPage";
 
-export default function Uniswap() {
+export default function Aave() {
   return (
     <ProtocolPage
-      name="Uniswap"
-      description="Uniswap è il più grande exchange decentralizzato (DEX) basato su AMM, che consente scambi di token senza order book."
+      name="Aave"
+      description="Aave è un protocollo di lending e borrowing non-custodial che permette di depositare asset crypto a garanzia per generare rendimento o ottenere liquidità."
       data={{
-        tvl: "$4.2B",
-        category: "DEX (Automated Market Maker)",
-        blockchains: ["Ethereum", "Polygon", "Arbitrum"],
+        tvl: "$8.5B",
+        category: "Lending & Borrowing",
+        blockchains: ["Ethereum", "Polygon", "Avalanche", "Arbitrum"],
       }}
       risks={[
-        { fattore: "Impermanent Loss", valutazione: "Alto", note: "Forte esposizione per LP in mercati volatili" },
-        { fattore: "Liquidità", valutazione: "Medio", note: "Molti pool ma concentrazione sugli asset top" },
-        { fattore: "Smart Contract Risk", valutazione: "Medio", note: "Audit multipli ma rischio exploit sempre presente" },
-        { fattore: "Concorrenza", valutazione: "Alto", note: "Competizione con altri DEX come Curve e Sushi" },
+        { fattore: "Volatilità collaterale", valutazione: "Alta", note: "Prestiti sovra-collateralizzati soggetti a liquidazioni" },
+        { fattore: "Liquidità", valutazione: "Alta", note: "Mercati profondi e ampia disponibilità di asset" },
+        { fattore: "Smart Contract Risk", valutazione: "Medio", note: "Codice complesso ma auditato e battle-tested" },
+        { fattore: "Dipendenza oracoli", valutazione: "Medio", note: "Feed Chainlink fondamentali per i prezzi" },
       ]}
-      comparison="Rispetto a Curve, Uniswap offre maggiore varietà di pool ma più esposizione a impermanent loss."
+      comparison="Rispetto a Compound, Aave supporta più asset, mercati isolati e funzionalità avanzate come i flash loan."
     />
   );
 }
