@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ADSENSE_CLIENT_ID, ADSENSE_SLOT_ID } from "./adConfig";
 
 export default function AdBanner() {
   useEffect(() => {
@@ -13,8 +14,8 @@ export default function AdBanner() {
     <ins
       className="adsbygoogle"
       style={{ display: "block" }}
-      data-ad-client="ca-pub-8531177897035530"
-      data-ad-slot="2583059282"
+      data-ad-client={ADSENSE_CLIENT_ID}
+      data-ad-slot={ADSENSE_SLOT_ID}
       data-ad-format="auto"
       data-full-width-responsive="true"
     ></ins>
