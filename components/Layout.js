@@ -1,80 +1,53 @@
-import Link from "next/link";
+import Script from "next/script";
 
 export default function Layout({ children }) {
   return (
-    <div>
-      <header style={{ padding: "1rem", background: "#111", color: "#fff" }}>
+    <>
+      {/* Script AdSense globale: caricato una sola volta */}
+      <Script
+        async
+        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8531177897035530"
+        crossOrigin="anonymous"
+        strategy="afterInteractive"
+      />
+
+      <header className="header">
         <h1>Crypto-Attuario</h1>
-        <nav style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-          <Link href="/">Home</Link>
-          <Link href="/blog">Blog</Link>
-          <Link href="/sponsor">Collabora</Link>
-
-          {/* Dropdown Calcolatori */}
-          <div className="dropdown">
-            <span>Calcolatori ▾</span>
-            <div className="dropdown-content">
-              <Link href="/staking">Staking</Link>
-              <Link href="/rendita">Rendita</Link>
-              <Link href="/var">Value at Risk</Link>
-              <Link href="/pensione">Pensione Crypto</Link>
-              <Link href="/confronto">DeFi vs TradFi</Link>
-            </div>
-          </div>
-
-          {/* Dropdown Analisi DeFi */}
-          <div className="dropdown">
-            <span>Analisi DeFi ▾</span>
-            <div className="dropdown-content">
-              <Link href="/defi">Panoramica</Link>
-              <Link href="/protocols/aave">Aave</Link>
-              <Link href="/protocols/uniswap">Uniswap</Link>
-              <Link href="/protocols/curve">Curve</Link>
-              <Link href="/protocols/lido">Lido</Link>
-            </div>
-          </div>
-
-          <Link href="/glossario">Glossario</Link>
+        <nav>
+          <a href="/">Home</a>
+          <a href="/blog">Blog</a>
+          <a href="/staking">Staking</a>
+          <a href="/rendita">Rendita</a>
+          <a href="/var">VaR</a>
+          <a href="/pensione">Pensione</a>
+          <a href="/confronto">DeFi vs TradFi</a>
+          <a href="/sponsor">Collabora</a>
         </nav>
       </header>
 
-      <main style={{ padding: "2rem" }}>{children}</main>
+      <main>
+        {/* Banner AdSense globale */}
+        <section className="ads-container">
+          <ins
+            className="adsbygoogle"
+            style={{ display: "block" }}
+            data-ad-client="ca-pub-8531177897035530"
+            data-ad-slot="1234567890"   // <-- sostituisci con il tuo slot ID
+            data-ad-format="auto"
+            data-full-width-responsive="true"
+          ></ins>
+          <Script id="ads-init">{`
+            (adsbygoogle = window.adsbygoogle || []).push({});
+          `}</Script>
+        </section>
 
-      <footer style={{ padding: "1rem", background: "#111", color: "#fff" }}>
-        <p>© 2025 Crypto-Attuario</p>
+        {children}
+      </main>
+
+      <footer>
+        <p>© 2025 Crypto-Attuario • Ricerca e analisi quantitative</p>
+        <small>⚠️ Non forniamo consulenza finanziaria. Solo fini educativi e di ricerca.</small>
       </footer>
-
-      {/* CSS minimale per dropdown */}
-      <style jsx>{`
-        .dropdown {
-          position: relative;
-          display: inline-block;
-        }
-        .dropdown span {
-          cursor: pointer;
-        }
-        .dropdown-content {
-          display: none;
-          position: absolute;
-          background-color: #222;
-          min-width: 160px;
-          z-index: 1;
-          padding: 0.5rem;
-          border-radius: 5px;
-        }
-        .dropdown-content a {
-          display: block;
-          padding: 0.25rem 0;
-          color: #00ffcc;
-          text-decoration: none;
-        }
-        .dropdown-content a:hover {
-          color: #fff;
-        }
-        .dropdown:hover .dropdown-content {
-          display: block;
-        }
-      `}</style>
-    </div>
+    </>
   );
 }
