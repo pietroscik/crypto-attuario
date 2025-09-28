@@ -1,6 +1,23 @@
+import Head from "next/head";
+
 export default function Home() {
   return (
     <>
+      <Head>
+        {/* Verifica proprietà AdSense */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-8531177897035530"
+        />
+
+        {/* Script AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8531177897035530"
+          crossOrigin="anonymous"
+        ></script>
+      </Head>
+
       <header className="header">
         <h1>Crypto-Attuario</h1>
         <nav>
@@ -14,8 +31,6 @@ export default function Home() {
           <a href="/confronto">DeFi vs TradFi</a>
           <a href="/defi">Analisi DeFi</a>
         </nav>
-<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8531177897035530"
-     crossorigin="anonymous"></script>
       </header>
 
       <main>
