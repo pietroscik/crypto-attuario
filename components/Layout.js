@@ -1,4 +1,5 @@
 import Script from "next/script";
+import { ADSENSE_CLIENT_ID, ADSENSE_SLOT_ID } from "./adConfig";
 
 export default function Layout({ children }) {
   return (
@@ -6,7 +7,7 @@ export default function Layout({ children }) {
       {/* Script AdSense globale: caricato una sola volta */}
       <Script
         async
-        src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8531177897035530"
+        src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADSENSE_CLIENT_ID}`}
         crossOrigin="anonymous"
         strategy="afterInteractive"
       />
@@ -31,8 +32,8 @@ export default function Layout({ children }) {
           <ins
             className="adsbygoogle"
             style={{ display: "block" }}
-            data-ad-client="ca-pub-8531177897035530"
-            data-ad-slot="1234567890"   // <-- sostituisci con il tuo slot ID
+            data-ad-client={ADSENSE_CLIENT_ID}
+            data-ad-slot={ADSENSE_SLOT_ID}
             data-ad-format="auto"
             data-full-width-responsive="true"
           ></ins>
