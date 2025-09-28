@@ -1,22 +1,25 @@
 import ProtocolPage from "../../components/ProtocolPage";
+import protocols from "../../data/protocolsData";
 
-export default function Uniswap() {
+const aave = protocols.aave;
+
+export default function Aave() {
+  const extendedDescription = `${aave.description} L'introduzione della v3 ha reso possibili isolation mode per gli asset a maggiore rischio, conservative cap di esposizione e gestione granulare delle fee di liquidazione.`;
+  const extendedComparison = `${aave.comparison} Per desk professionali è rilevante valutare anche la sostenibilità del Safety Module e la distribuzione dei delegati di governance che definiscono i parametri di rischio.`;
+  const pageInsights = [
+    ...aave.insights,
+    "Configura alert sull'Health Factor e sul Loan-to-Value medio del portafoglio per prevenire liquidazioni a catena.",
+    "Sfrutta le High Efficiency Mode per stablecoin e asset correlati quando cerchi leva conservativa.",
+  ];
+
   return (
     <ProtocolPage
-      name="Uniswap"
-      description="Uniswap è il più grande exchange decentralizzato (DEX) basato su AMM, che consente scambi di token senza order book."
-      data={{
-        tvl: "$4.2B",
-        category: "DEX (Automated Market Maker)",
-        blockchains: ["Ethereum", "Polygon", "Arbitrum"],
-      }}
-      risks={[
-        { fattore: "Impermanent Loss", valutazione: "Alto", note: "Forte esposizione per LP in mercati volatili" },
-        { fattore: "Liquidità", valutazione: "Medio", note: "Molti pool ma concentrazione sugli asset top" },
-        { fattore: "Smart Contract Risk", valutazione: "Medio", note: "Audit multipli ma rischio exploit sempre presente" },
-        { fattore: "Concorrenza", valutazione: "Alto", note: "Competizione con altri DEX come Curve e Sushi" },
-      ]}
-      comparison="Rispetto a Curve, Uniswap offre maggiore varietà di pool ma più esposizione a impermanent loss."
+      name={aave.name}
+      description={extendedDescription}
+      data={aave.data}
+      risks={aave.risks}
+      comparison={extendedComparison}
+      insights={pageInsights}
     />
   );
 }

@@ -89,6 +89,37 @@ h3 {
   gap: 1.5rem;
 }
 
+/* Pulsanti CTA */
+.cta-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  background: #00ffcc;
+  color: #041316;
+  font-weight: 600;
+  text-decoration: none;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 12px 25px -18px rgba(0, 255, 204, 0.8);
+}
+
+.cta-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 16px 28px -18px rgba(0, 255, 204, 0.9);
+}
+
+.cta-btn.secondary {
+  background: transparent;
+  color: #00ffcc;
+  border: 1px solid #00ffcc;
+  box-shadow: none;
+}
+
+.cta-btn.secondary:hover {
+  background: rgba(0, 255, 204, 0.12);
+}
+
 /* Tabella rischi */
 .table {
   width: 100%;

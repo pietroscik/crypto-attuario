@@ -1,22 +1,25 @@
 import ProtocolPage from "../../components/ProtocolPage";
+import protocols from "../../data/protocolsData";
+
+const lido = protocols.lido;
 
 export default function Lido() {
+  const extendedDescription = `${lido.description} Il DAO coordina validatori professionali e destina parte delle fee al tesoro per incentivare la sicurezza del network.`;
+  const extendedComparison = `${lido.comparison} Gli investitori devono misurare l'impatto delle proposte di governance sul tasso di commissione e sul grado di centralizzazione dei nodi.`;
+  const pageInsights = [
+    ...lido.insights,
+    "Valuta scenari di liquidity crunch in cui lo sconto di stETH rispetto a ETH supera il 1-2%.",
+    "Analizza la distribuzione del rischio fra i nodi operator per ridurre dipendenze da singole entità.",
+  ];
+
   return (
     <ProtocolPage
-      name="Lido Finance"
-      description="Lido è il principale protocollo di liquid staking, che permette agli utenti di mettere in staking i propri asset (come ETH) ricevendo token derivati (stETH) utilizzabili nella DeFi."
-      data={{
-        tvl: "$17.6B",
-        category: "Liquid Staking",
-        blockchains: ["Ethereum", "Polygon", "Solana (storico)", "Moonbeam"],
-      }}
-      risks={[
-        { fattore: "Volatilità collaterale", valutazione: "Medio", note: "ETH resta esposto a drawdown di mercato" },
-        { fattore: "Liquidità", valutazione: "Alta", note: "Mercati profondi per stETH e simili" },
-        { fattore: "Smart Contract Risk", valutazione: "Medio", note: "Elevato TVL lo rende un target per exploit" },
-        { fattore: "Concentrazione stake", valutazione: "Alto", note: "Elevata centralizzazione del validatore può essere un rischio sistemico" },
-      ]}
-      comparison="Rispetto a RocketPool, Lido ha TVL molto maggiore ma presenta rischi più elevati di concentrazione e centralizzazione del validatore."
+      name={lido.name}
+      description={extendedDescription}
+      data={lido.data}
+      risks={lido.risks}
+      comparison={extendedComparison}
+      insights={pageInsights}
     />
   );
 }

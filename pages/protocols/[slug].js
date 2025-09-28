@@ -19,6 +19,7 @@ export default function Protocol() {
       data={protocol.data}
       risks={protocol.risks}
       comparison={protocol.comparison}
+      insights={protocol.insights}
     />
   );
 }
