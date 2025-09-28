@@ -1,5 +1,26 @@
 import Head from "next/head";
 
+import AdBanner from "../components/AdBanner";
+
+export default function Home() {
+  return (
+    <>
+      <header className="header">
+        <h1>Crypto-Attuario</h1>
+      </header>
+
+      <main>
+        <section className="hero">
+          <h2>Benvenuto su Crypto-Attuario</h2>
+          <p>Analisi quantitativa della DeFi con metodo attuariale</p>
+        </section>
+
+        {/* Qui appare il banner AdSense */}
+        <AdBanner />
+      </main>
+    </>
+  );
+}
 export default function Home() {
   return (
     <>
