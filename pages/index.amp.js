@@ -64,192 +64,193 @@ export default function HomeAmp() {
           custom-element="amp-auto-ads"
           src="https://cdn.ampproject.org/v0/amp-auto-ads-0.1.js"
         ></script>
-        <style amp-custom="">{`
-          :root {
-            --bg: #020617;
-            --bg-soft: rgba(15, 23, 42, 0.85);
-            --border: rgba(148, 163, 184, 0.25);
-            --accent: #22d3ee;
-            --accent-soft: #7fffd4;
-            --text-primary: #f8fafc;
-            --text-secondary: #cbd5f5;
-          }
-
-          *,
-          *::before,
-          *::after {
-            box-sizing: border-box;
-          }
-
-          body {
-            margin: 0;
-            font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(120% 120% at 50% -20%, rgba(34, 211, 238, 0.18), transparent 55%),
-              linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 0.98) 60%, var(--bg) 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-          }
-
-          a {
-            color: inherit;
-          }
-
-          .page-shell {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(2, 6, 23, 0.9) 40%, var(--bg) 100%);
-          }
-
-          .page-header,
-          main,
-          footer {
-            width: 100%;
-            max-width: 960px;
-            margin: 0 auto;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
-          }
-
-          .page-header {
-            padding-top: 2.5rem;
-            padding-bottom: 1.5rem;
-          }
-
-          .page-title {
-            font-size: 2.5rem;
-            margin: 0 0 0.5rem;
-            color: var(--accent);
-            letter-spacing: -0.02em;
-          }
-
-          .page-subtitle {
-            margin: 0;
-            font-size: 1.1rem;
-            line-height: 1.65;
-            color: var(--text-secondary);
-          }
-
-          main {
-            flex: 1 0 auto;
-            padding-bottom: 3.5rem;
-          }
-
-          h2 {
-            font-size: 1.75rem;
-            color: var(--accent);
-            margin-bottom: 0.75rem;
-          }
-
-          .section {
-            margin-bottom: 2.75rem;
-          }
-
-          .card-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1.25rem;
-            margin-top: 1.5rem;
-          }
-
-          .card,
-          .list-card {
-            border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 1.35rem;
-            background: var(--bg-soft);
-            box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.9);
-            transition: border-color 180ms ease, transform 180ms ease;
-          }
-
-          .card:hover,
-          .list-card:hover {
-            border-color: var(--accent);
-            transform: translateY(-3px);
-          }
-
-          .card-title {
-            margin: 0 0 0.5rem;
-            color: var(--accent-soft);
-            font-size: 1.05rem;
-          }
-
-          .card-text {
-            margin: 0;
-            line-height: 1.6;
-            color: var(--text-primary);
-            opacity: 0.88;
-          }
-
-          .callout-text {
-            opacity: 0.92;
-          }
-
-          .list {
-            list-style: none;
-            padding: 0;
-            margin: 1.5rem 0 0;
-          }
-
-          .list-link {
-            text-decoration: none;
-            color: var(--accent-soft);
-            font-weight: 600;
-            display: inline-block;
-          }
-
-          .list-text {
-            margin: 0.5rem 0 0;
-            line-height: 1.6;
-            color: var(--text-secondary);
-          }
-
-          .callout {
-            text-align: center;
-            border-radius: 16px;
-            background: linear-gradient(135deg, rgba(15, 118, 110, 0.35), rgba(2, 6, 23, 0.95));
-            border: 1px solid rgba(34, 211, 238, 0.25);
-            padding: 2.25rem 2rem;
-          }
-
-          footer {
-            padding-top: 2rem;
-            padding-bottom: 2.5rem;
-            text-align: center;
-            font-size: 0.9rem;
-            border-top: 1px solid rgba(15, 23, 42, 0.65);
-            color: rgba(226, 232, 240, 0.8);
-          }
-
-          footer p {
-            margin: 0;
-          }
-
-          footer p + p {
-            margin-top: 0.65rem;
-            color: rgba(148, 163, 184, 0.85);
-          }
-
-          @media (max-width: 640px) {
-            .page-header {
-              padding-top: 2rem;
-            }
-
-            .page-title {
-              font-size: 2.1rem;
-            }
-
-            main {
-              padding-bottom: 3rem;
-            }
-          }
-        `}</style>
       </Head>
 
       <amp-auto-ads
         type="adsense"
         data-ad-client="ca-pub-8531177897035530"
       ></amp-auto-ads>
+
+      <style jsx global>{`
+        :root {
+          --bg: #020617;
+          --bg-soft: rgba(15, 23, 42, 0.85);
+          --border: rgba(148, 163, 184, 0.25);
+          --accent: #22d3ee;
+          --accent-soft: #7fffd4;
+          --text-primary: #f8fafc;
+          --text-secondary: #cbd5f5;
+        }
+
+        *,
+        *::before,
+        *::after {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+          background: radial-gradient(120% 120% at 50% -20%, rgba(34, 211, 238, 0.18), transparent 55%),
+            linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 0.98) 60%, var(--bg) 100%);
+          color: var(--text-primary);
+          min-height: 100vh;
+        }
+
+        a {
+          color: inherit;
+        }
+
+        .page-shell {
+          display: flex;
+          flex-direction: column;
+          min-height: 100vh;
+          background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(2, 6, 23, 0.9) 40%, var(--bg) 100%);
+        }
+
+        .page-header,
+        main,
+        footer {
+          width: 100%;
+          max-width: 960px;
+          margin: 0 auto;
+          padding-left: 1.5rem;
+          padding-right: 1.5rem;
+        }
+
+        .page-header {
+          padding-top: 2.5rem;
+          padding-bottom: 1.5rem;
+        }
+
+        .page-title {
+          font-size: 2.5rem;
+          margin: 0 0 0.5rem;
+          color: var(--accent);
+          letter-spacing: -0.02em;
+        }
+
+        .page-subtitle {
+          margin: 0;
+          font-size: 1.1rem;
+          line-height: 1.65;
+          color: var(--text-secondary);
+        }
+
+        main {
+          flex: 1 0 auto;
+          padding-bottom: 3.5rem;
+        }
+
+        h2 {
+          font-size: 1.75rem;
+          color: var(--accent);
+          margin-bottom: 0.75rem;
+        }
+
+        .section {
+          margin-bottom: 2.75rem;
+        }
+
+        .card-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 1.25rem;
+          margin-top: 1.5rem;
+        }
+
+        .card,
+        .list-card {
+          border: 1px solid var(--border);
+          border-radius: 16px;
+          padding: 1.35rem;
+          background: var(--bg-soft);
+          box-shadow: 0 20px 40px -24px rgba(15, 23, 42, 0.9);
+          transition: border-color 180ms ease, transform 180ms ease;
+        }
+
+        .card:hover,
+        .list-card:hover {
+          border-color: var(--accent);
+          transform: translateY(-3px);
+        }
+
+        .card-title {
+          margin: 0 0 0.5rem;
+          color: var(--accent-soft);
+          font-size: 1.05rem;
+        }
+
+        .card-text {
+          margin: 0;
+          line-height: 1.6;
+          color: var(--text-primary);
+          opacity: 0.88;
+        }
+
+        .callout-text {
+          opacity: 0.92;
+        }
+
+        .list {
+          list-style: none;
+          padding: 0;
+          margin: 1.5rem 0 0;
+        }
+
+        .list-link {
+          text-decoration: none;
+          color: var(--accent-soft);
+          font-weight: 600;
+          display: inline-block;
+        }
+
+        .list-text {
+          margin: 0.5rem 0 0;
+          line-height: 1.6;
+          color: var(--text-secondary);
+        }
+
+        .callout {
+          text-align: center;
+          border-radius: 16px;
+          background: linear-gradient(135deg, rgba(15, 118, 110, 0.35), rgba(2, 6, 23, 0.95));
+          border: 1px solid rgba(34, 211, 238, 0.25);
+          padding: 2.25rem 2rem;
+        }
+
+        footer {
+          padding-top: 2rem;
+          padding-bottom: 2.5rem;
+          text-align: center;
+          font-size: 0.9rem;
+          border-top: 1px solid rgba(15, 23, 42, 0.65);
+          color: rgba(226, 232, 240, 0.8);
+        }
+
+        footer p {
+          margin: 0;
+        }
+
+        footer p + p {
+          margin-top: 0.65rem;
+          color: rgba(148, 163, 184, 0.85);
+        }
+
+        @media (max-width: 640px) {
+          .page-header {
+            padding-top: 2rem;
+          }
+
+          .page-title {
+            font-size: 2.1rem;
+          }
+
+          main {
+            padding-bottom: 3rem;
+          }
+        }
+      `}</style>
 
       <div className="page-shell">
         <header className="page-header">
