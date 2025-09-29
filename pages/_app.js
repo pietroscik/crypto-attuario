@@ -1,15 +1,21 @@
-import "../styles/style.css"
 import Head from "next/head"
 import Script from "next/script"
 import { useEffect } from "react"
 import { useRouter } from "next/router"
 import { useAmp } from "next/amp"
 
+let hasLoadedGlobalStyles = false
+
 const GA_MEASUREMENT_ID = 'G-7SBJ3PN329'
 
 export default function MyApp({ Component, pageProps }) {
   const router = useRouter()
   const isAmp = useAmp()
+
+  if (!isAmp && !hasLoadedGlobalStyles) {
+    require("../styles/style.css")
+    hasLoadedGlobalStyles = true
+  }
 
   useEffect(() => {
     const handleRouteChange = (url) => {
