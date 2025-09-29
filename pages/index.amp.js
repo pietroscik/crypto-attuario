@@ -2,6 +2,170 @@ import Head from "next/head"
 
 export const config = { amp: true }
 
+const ampStyles = `
+  :root {
+    color-scheme: dark;
+  }
+
+  body {
+    margin: 0;
+    font-family: "Inter", Arial, sans-serif;
+    background: #000;
+    color: #f1f1f1;
+    line-height: 1.6;
+  }
+
+  a {
+    color: inherit;
+  }
+
+  main {
+    display: block;
+  }
+
+  .page-shell {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    background: #000;
+  }
+
+  .page-header,
+  .page-shell main,
+  .page-shell footer {
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto;
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+
+  .page-header {
+    padding-top: 2.5rem;
+    padding-bottom: 1.5rem;
+  }
+
+  .page-title {
+    font-size: 2.5rem;
+    margin: 0 0 0.5rem;
+    color: #00ffcc;
+    letter-spacing: -0.02em;
+  }
+
+  .page-subtitle {
+    margin: 0;
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: #a8d5ff;
+  }
+
+  .section {
+    margin-bottom: 2.75rem;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 1.25rem;
+    margin-top: 1.5rem;
+  }
+
+  .card,
+  .list-card {
+    border: 1px solid rgba(0, 255, 204, 0.25);
+    border-radius: 16px;
+    padding: 1.35rem;
+    background: #050505;
+    box-shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.9);
+    transition: border-color 180ms ease, transform 180ms ease;
+    text-decoration: none;
+    display: block;
+  }
+
+  .card:hover,
+  .list-card:hover {
+    border-color: #00ffcc;
+    transform: translateY(-3px);
+  }
+
+  .card-title {
+    margin: 0 0 0.5rem;
+    color: #7fffd4;
+    font-size: 1.05rem;
+  }
+
+  .card-text {
+    margin: 0;
+    line-height: 1.6;
+    color: #f1f1f1;
+    opacity: 0.9;
+  }
+
+  .list {
+    list-style: none;
+    padding: 0;
+    margin: 1.5rem 0 0;
+  }
+
+  .list-link {
+    text-decoration: none;
+    color: #7fffd4;
+    font-weight: 600;
+    display: inline-block;
+  }
+
+  .list-text {
+    margin: 0.5rem 0 0;
+    line-height: 1.6;
+    color: #a8d5ff;
+  }
+
+  .callout {
+    text-align: center;
+    border-radius: 16px;
+    background: radial-gradient(circle at top, rgba(0, 255, 204, 0.25), transparent 60%),
+      #050505;
+    border: 1px solid rgba(0, 255, 204, 0.3);
+    padding: 2.25rem 2rem;
+  }
+
+  .callout-text {
+    opacity: 0.92;
+  }
+
+  footer {
+    padding-top: 2rem;
+    padding-bottom: 2.5rem;
+    text-align: center;
+    font-size: 0.9rem;
+    border-top: 1px solid rgba(0, 255, 204, 0.25);
+    color: rgba(200, 220, 255, 0.8);
+  }
+
+  footer p {
+    margin: 0;
+  }
+
+  footer p + p {
+    margin-top: 0.65rem;
+    color: rgba(148, 163, 184, 0.85);
+  }
+
+  @media (max-width: 640px) {
+    .page-header {
+      padding-top: 2rem;
+    }
+
+    .page-title {
+      font-size: 2.1rem;
+    }
+
+    .page-shell main {
+      padding-bottom: 3rem;
+    }
+  }
+`
+
 const highlights = [
   {
     title: "Stress test attuariali sui protocolli di lending",
@@ -121,6 +285,8 @@ export default function HomeAmp() {
           <p>Le informazioni hanno finalità educative e non costituiscono consulenza finanziaria.</p>
         </footer>
       </div>
+
+      <style jsx global>{ampStyles}</style>
     </>
   )
 }
