@@ -66,8 +66,8 @@ export default function HomeAmp() {
         ></script>
         <style amp-custom="">{`
           :root {
-            --bg: #020617;
-            --bg-soft: rgba(15, 23, 42, 0.85);
+            --bg: #000000;
+            --bg-soft: rgba(0, 0, 0, 0.85);
             --border: rgba(148, 163, 184, 0.25);
             --accent: #22d3ee;
             --accent-soft: #7fffd4;
@@ -84,8 +84,7 @@ export default function HomeAmp() {
           body {
             margin: 0;
             font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-            background: radial-gradient(120% 120% at 50% -20%, rgba(34, 211, 238, 0.18), transparent 55%),
-              linear-gradient(180deg, rgba(15, 23, 42, 0.95) 0%, rgba(2, 6, 23, 0.98) 60%, var(--bg) 100%);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 1) 60%, var(--bg) 100%);
             color: var(--text-primary);
             min-height: 100vh;
           }
@@ -98,7 +97,7 @@ export default function HomeAmp() {
             display: flex;
             flex-direction: column;
             min-height: 100vh;
-            background: linear-gradient(180deg, rgba(15, 23, 42, 0.4) 0%, rgba(2, 6, 23, 0.9) 40%, var(--bg) 100%);
+            background: linear-gradient(180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0.95) 40%, var(--bg) 100%);
           }
 
           .page-header,
@@ -207,8 +206,8 @@ export default function HomeAmp() {
           .callout {
             text-align: center;
             border-radius: 16px;
-            background: linear-gradient(135deg, rgba(15, 118, 110, 0.35), rgba(2, 6, 23, 0.95));
-            border: 1px solid rgba(34, 211, 238, 0.25);
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.85), rgba(0, 0, 0, 0.95));
+            border: 1px solid rgba(148, 163, 184, 0.2);
             padding: 2.25rem 2rem;
           }
 
