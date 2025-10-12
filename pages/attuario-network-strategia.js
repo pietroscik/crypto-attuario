@@ -13,6 +13,8 @@ const sections = [
           "Misura la perdita massima attesa entro un certo intervallo di confidenza su un orizzonte temporale definito.",
         implementation:
           "Combina approcci storici, parametrici e simulazioni Monte Carlo per catturare code grasse e stressare diversi scenari di mercato.",
+        practical:
+          "Caso pratico: treasury di un protocollo di lending che modula l'emissione di token reward limitando il VaR giornaliero al 3% del TVL.",
       },
       {
         name: "Conditional Value at Risk (CVaR)",
@@ -20,6 +22,8 @@ const sections = [
           "Stimare la perdita media oltre il VaR consente di valutare impatti estremi che nelle crypto si verificano con frequenza superiore alla finanza tradizionale.",
         implementation:
           "Integrare CVaR nei comitati di tesoreria DeFi per dimensionare buffer di capitale, soglie di alert e limiti di esposizione.",
+        practical:
+          "Caso pratico: pool di liquidità con stablecoin algoritmica che riserva il 15% delle fee in un fondo di garanzia quando il CVaR settimanale supera i limiti.",
       },
     ],
   },
@@ -34,6 +38,8 @@ const sections = [
           "Seleziona le allocazioni efficienti massimizzando il rendimento atteso per un dato livello di rischio.",
         implementation:
           "Utilizzare serie storiche on-chain e off-chain per stimare matrici di covarianza, includendo costi di slippage e impermanent loss.",
+        practical:
+          "Caso pratico: ribilanciamento mensile di un vault DeFi che distribuisce 60% in lending, 25% in staking e 15% in strategie delta-neutral in base alla frontiera efficiente.",
       },
       {
         name: "Algoritmi evolutivi",
@@ -41,6 +47,8 @@ const sections = [
           "Approcci genetici esplorano combinazioni non lineari di asset e strategie di rendimento.",
         implementation:
           "Evolvere popolazioni di portafogli con fitness basata su Sharpe, Sortino e drawdown massimi per individuare soluzioni robuste.",
+        practical:
+          "Caso pratico: optimizer genetico che testa 200 combinazioni di farm cross-chain e seleziona quelle con payout stabile e correlazione inferiore a 0,4.",
       },
     ],
   },
@@ -55,6 +63,8 @@ const sections = [
           "Analizzano sequenze temporali tenendo conto delle dipendenze tra osservazioni consecutive.",
         implementation:
           "Addestrare LSTM o GRU su dataset multi-exchange, includendo volumi, funding rate e dati di sentiment.",
+        practical:
+          "Caso pratico: previsione rolling a 24 ore per adeguare i tassi di un prodotto di savings quando il modello prevede drawdown >5%.",
       },
       {
         name: "Modelli ARIMA",
@@ -62,6 +72,8 @@ const sections = [
           "Modelli autoregressivi che catturano trend, stagionalità e componenti stocastiche delle serie temporali.",
         implementation:
           "Applicare ARIMA come baseline interpretabile per stressare ipotesi di pricing degli incentivi e confrontare le previsioni ML.",
+        practical:
+          "Caso pratico: desk di risk management che confronta ARIMA e RNN per decidere l'aumento delle ricompense quando i volumi DEX calano oltre una deviazione standard.",
       },
     ],
   },
@@ -76,6 +88,8 @@ const sections = [
           "Sfruttano differenze di prezzo tra exchange centralizzati e decentralizzati o tra pool con diversa composizione.",
         implementation:
           "Integrare bot che monitorano order book e pool AMM, con esecuzione automatica al superamento di soglie di spread predefinite.",
+        practical:
+          "Caso pratico: bot che reindirizza il 20% delle plusvalenze di arbitraggio in un fondo di reward per i liquidity provider che mantengono la posizione oltre 30 giorni.",
       },
       {
         name: "Trading basato su indicatori tecnici",
@@ -83,6 +97,8 @@ const sections = [
           "Indicatori come RSI e MACD generano segnali quantitativi per ottimizzare ingressi e uscite.",
         implementation:
           "Parametrizzare gli incentivi in base ai segnali tecnici, ad esempio modulando le reward quando RSI segnala ipercomprato o ipervenduto.",
+        practical:
+          "Caso pratico: strategia che aumenta del 10% i bonus di staking quando RSI <30 per stimolare raccolta durante fasi di pressione di vendita.",
       },
     ],
   },
@@ -97,6 +113,8 @@ const sections = [
           "Le ricompense si adattano ai comportamenti osservati e al contributo dell'utente.",
         implementation:
           "Calibrare moltiplicatori di reward con algoritmi predittivi che stimano churn, engagement e impatto sulla liquidità.",
+        practical:
+          "Caso pratico: loyalty program che attribuisce booster trimestrali agli utenti con retention >80% e attività di governance superiori alla media.",
       },
     ],
   },
@@ -111,6 +129,8 @@ const sections = [
           "Tecniche NLP estraggono opinioni e aspettative da social media, forum e canali community.",
         implementation:
           "Utilizzare modelli transformer multilingua per classificare il sentiment e collegarlo a metriche on-chain, regolando incentivi e campagne informative.",
+        practical:
+          "Caso pratico: dashboard che riduce le reward destinate al referral program quando il sentiment negativo supera il 60% per tre giorni consecutivi.",
       },
     ],
   },
@@ -120,17 +140,47 @@ const bestPractices = [
   {
     title: "Data engineering integrato",
     description:
-      "Consolidare feed on-chain, dati di mercato e segnali comportamentali in un data lake facilita la governance dei modelli.",
+      "Consolidare feed on-chain, dati di mercato e segnali comportamentali in un data lake facilita la governance dei modelli; utilizzare pipeline automatizzate (ad es. Airflow) per garantire aggiornamenti orari e data quality.",
   },
   {
     title: "Stress test continui",
     description:
-      "Validare le strategie di remunerazione con scenari what-if su volatilità estrema, congestione di rete e variazioni di liquidity mining.",
+      "Validare le strategie di remunerazione con scenari what-if su volatilità estrema, congestione di rete e variazioni di liquidity mining, documentando gli impatti sul costo delle reward e sulla TVL.",
   },
   {
     title: "Misurazione dell'impatto",
     description:
-      "Monitorare KPI come retention, TVL incrementale e costo di acquisizione per iterare rapidamente sugli incentivi.",
+      "Monitorare KPI come retention, TVL incrementale e costo di acquisizione per iterare rapidamente sugli incentivi; impostare dashboard condivise (Looker, Metabase) con alert automatici.",
+  },
+];
+
+const caseStudies = [
+  {
+    title: "Vault di stablecoin con copertura del rischio",
+    challenge:
+      "Ridurre la volatilità del rendimento distribuendo incentivi in funzione della stabilità del collaterale.",
+    approach:
+      "Applicazione combinata di VaR giornaliero e CVaR settimanale per modulare le emissioni; quando i rischi aumentano, parte del reward viene spostato su bond tokenizzati a bassa volatilità.",
+    outcome:
+      "Riduzione del drawdown massimo dal 18% al 9% e crescita della retention dei depositanti dal 62% al 78% in tre mesi.",
+  },
+  {
+    title: "Programma referral con AI per l'engagement",
+    challenge:
+      "Aumentare utenti attivi evitando frodi e account dormienti.",
+    approach:
+      "Modello di churn prediction che classifica i referrer; i bonus si attivano solo se i referral mantengono TVL >5000$ dopo 30 giorni. L'algoritmo suggerisce messaggi personalizzati basati sul sentiment social.",
+    outcome:
+      "Incremento del 35% degli utenti attivi mensili e riduzione del 22% dei bonus sprecati su account inattivi.",
+  },
+  {
+    title: "Desk di market making automatizzato",
+    challenge:
+      "Stabilizzare la profondità del book su coppie a bassa liquidità.",
+    approach:
+      "Bot di arbitraggio fra CEX e DEX collegato a un optimizer genetico che seleziona pool con minore correlazione; l'RNN di prezzo adegua i range di concentrazione nelle liquidity position.",
+    outcome:
+      "Aumento del 27% della liquidità media e compressione dello spread medio da 1,8% a 0,9% in sei settimane.",
   },
 ];
 
@@ -267,12 +317,54 @@ export default function AttuarioNetworkStrategia() {
                     <p style={{ lineHeight: 1.6, margin: 0 }}>
                       <strong style={{ color: "#00ffcc" }}>Implementazione consigliata:</strong> {item.implementation}
                     </p>
+                    {item.practical && (
+                      <p style={{ lineHeight: 1.6, margin: "0.6rem 0 0" }}>
+                        <strong style={{ color: "#00ffcc" }}>Applicazione reale:</strong> {item.practical}
+                      </p>
+                    )}
                   </article>
                 ))}
               </div>
             </section>
           ))}
         </div>
+
+        <section
+          style={{
+            background: "#101721",
+            borderRadius: "18px",
+            padding: "2rem",
+            border: "1px solid #1f2d36",
+            marginBottom: "3rem",
+          }}
+        >
+          <h2 style={{ color: "#00ffcc", marginBottom: "0.85rem" }}>Casi pratici da replicare</h2>
+          <div style={{ display: "grid", gap: "1.5rem" }}>
+            {caseStudies.map((useCase) => (
+              <article
+                key={useCase.title}
+                style={{
+                  background: "#0f141b",
+                  borderRadius: "16px",
+                  padding: "1.75rem",
+                  border: "1px solid #1f2d36",
+                  boxShadow: "0 18px 32px -28px rgba(0, 255, 204, 0.2)",
+                }}
+              >
+                <h3 style={{ color: "#7fffd4", marginBottom: "0.75rem", fontSize: "1.3rem" }}>{useCase.title}</h3>
+                <p style={{ lineHeight: 1.6, marginBottom: "0.6rem" }}>
+                  <strong style={{ color: "#00ffcc" }}>Sfida:</strong> {useCase.challenge}
+                </p>
+                <p style={{ lineHeight: 1.6, marginBottom: "0.6rem" }}>
+                  <strong style={{ color: "#00ffcc" }}>Approccio:</strong> {useCase.approach}
+                </p>
+                <p style={{ lineHeight: 1.6, margin: 0 }}>
+                  <strong style={{ color: "#00ffcc" }}>Risultato:</strong> {useCase.outcome}
+                </p>
+              </article>
+            ))}
+          </div>
+        </section>
 
         <section
           style={{
