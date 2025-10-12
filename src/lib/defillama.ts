@@ -104,13 +104,33 @@ export async function getPools(): Promise<DefiLlamaPool[]> {
 }
 
 /**
- * Normalizes pool data to a consistent format
+ * Type guard to check if a string is valid (non-empty and trimmed)
+ */
+function isValidString(value: unknown): value is string {
+  return typeof value === 'string' && value.trim().length > 0;
+}
+
+/**
+ * Type guard to check if a number is valid (not NaN, not Infinity, finite)
+ */
+function isValidNumber(value: unknown): value is number {
+  return typeof value === 'number' && isFinite(value) && !isNaN(value);
+}
+
+/**
+ * Normalizes pool data to a consistent format with strict type checking
  */
 export function normalizePools(pools: DefiLlamaPool[]): NormalizedPool[] {
+  if (!Array.isArray(pools)) {
+    return [];
+  }
+
   return pools
     .map((pool) => {
-      // Skip pools with missing critical data
-      if (!pool.chain || !pool.project || !pool.symbol) {
+      // Type guard: Skip pools with missing or invalid critical string data
+      if (!isValidString(pool.chain) || 
+          !isValidString(pool.project) || 
+          !isValidString(pool.symbol)) {
         return null;
       }
 
@@ -120,24 +140,33 @@ export function normalizePools(pools: DefiLlamaPool[]): NormalizedPool[] {
         apy = pool.apyBase + (pool.apyReward ?? 0);
       }
 
-      // Skip pools with no TVL or negative/invalid APY
-      if (!pool.tvlUsd || pool.tvlUsd <= 0 || apy < 0) {
+      // Type guard: Skip pools with invalid numeric data
+      if (!isValidNumber(pool.tvlUsd) || 
+          !isValidNumber(apy) || 
+          pool.tvlUsd <= 0 || 
+          apy < 0) {
         return null;
       }
 
+      // Validate and sanitize apy7d
+      const apy7d = isValidNumber(pool.apy7d) ? pool.apy7d : null;
+      const apyBase = isValidNumber(pool.apyBase) ? pool.apyBase : null;
+
       // Build URL: use provided url or construct from pool data
-      let url = pool.url || '';
-      if (!url && pool.pool) {
+      let url = '';
+      if (isValidString(pool.url)) {
+        url = pool.url;
+      } else if (isValidString(pool.pool)) {
         url = `https://defillama.com/yields/pool/${pool.pool}`;
       }
 
       return {
-        chain: pool.chain,
-        project: pool.project,
-        symbol: pool.symbol,
+        chain: pool.chain.trim(),
+        project: pool.project.trim(),
+        symbol: pool.symbol.trim(),
         apy: apy,
-        apyBase: pool.apyBase ?? null,
-        apy7d: pool.apy7d ?? null,
+        apyBase: apyBase,
+        apy7d: apy7d,
         tvlUsd: pool.tvlUsd,
         url: url,
       };
@@ -161,6 +190,10 @@ export function normalizePools(pools: DefiLlamaPool[]): NormalizedPool[] {
  * - Future enhancement: Calculate rolling MAD (Median Absolute Deviation) 
  *   from pools with similar characteristics (same protocol/chain/asset type)
  * - Future enhancement: Use historical volatility from time-series data
+ * 
+ * Stability improvements for low volatility:
+ * - MIN_VOL_PROXY increased to 0.01 for better stability
+ * - Tiered approach: volProxy < 0.01 uses 0.01 to prevent extreme ratios
  */
 export function rankPools(
   pools: NormalizedPool[],
@@ -168,34 +201,43 @@ export function rankPools(
   minTVL: number = 0
 ): RankedPool[] {
   const DEFAULT_VOL_PROXY = 0.05;
-  const MIN_VOL_PROXY = 0.001; // Minimum volatility to prevent extreme values
+  const MIN_VOL_PROXY = 0.01; // Increased from 0.001 for better stability
 
-  return pools
-    .filter((pool) => pool.tvlUsd >= minTVL)
-    .map((pool) => {
-      // Calculate volatility proxy
-      let volProxy = DEFAULT_VOL_PROXY;
-      
-      if (pool.apy7d !== null && !isNaN(pool.apy7d)) {
-        const calculatedVol = Math.abs(pool.apy - pool.apy7d);
-        // Use calculated volatility if it's reasonable, otherwise use default
-        if (calculatedVol > 0) {
-          volProxy = calculatedVol;
-        }
+  // Pre-allocate array for better memory efficiency
+  const filteredPools = pools.filter((pool) => pool.tvlUsd >= minTVL);
+  const rankedPools: RankedPool[] = new Array(filteredPools.length);
+
+  for (let i = 0; i < filteredPools.length; i++) {
+    const pool = filteredPools[i];
+    
+    // Calculate volatility proxy with strict type checking
+    let volProxy = DEFAULT_VOL_PROXY;
+    
+    if (pool.apy7d !== null && isValidNumber(pool.apy7d)) {
+      const calculatedVol = Math.abs(pool.apy - pool.apy7d);
+      // Use calculated volatility if it's reasonable and above minimum
+      if (calculatedVol > MIN_VOL_PROXY) {
+        volProxy = calculatedVol;
+      } else if (calculatedVol > 0) {
+        // For very small but positive volatility, use the minimum
+        volProxy = MIN_VOL_PROXY;
       }
+    }
 
-      // Apply minimum volatility to prevent division by near-zero
-      volProxy = Math.max(volProxy, MIN_VOL_PROXY);
+    // Ensure minimum volatility for numerical stability
+    volProxy = Math.max(volProxy, MIN_VOL_PROXY);
 
-      // Calculate risk-adjusted metric (Sharpe-like ratio)
-      const excessReturn = pool.apy - riskFreeRate;
-      const riskAdjustedMetric = excessReturn / volProxy;
+    // Calculate risk-adjusted metric (Sharpe-like ratio)
+    const excessReturn = pool.apy - riskFreeRate;
+    const riskAdjustedMetric = excessReturn / volProxy;
 
-      return {
-        ...pool,
-        volProxy: volProxy,
-        riskAdjustedMetric: riskAdjustedMetric,
-      };
-    })
-    .sort((a, b) => b.riskAdjustedMetric - a.riskAdjustedMetric);
+    rankedPools[i] = {
+      ...pool,
+      volProxy: volProxy,
+      riskAdjustedMetric: isValidNumber(riskAdjustedMetric) ? riskAdjustedMetric : 0,
+    };
+  }
+
+  // Use optimized sort with pre-computed keys
+  return rankedPools.sort((a, b) => b.riskAdjustedMetric - a.riskAdjustedMetric);
 }
