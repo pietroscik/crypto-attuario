@@ -97,8 +97,8 @@ export default function AttuarioRanking() {
 
   return (
     <Layout>
-      <section>
-        <h2 style={{ color: '#00ffcc', marginBottom: '1rem' }}>
+      <section aria-labelledby="ranking-title">
+        <h2 id="ranking-title" style={{ color: '#00ffcc', marginBottom: '1rem' }}>
           Ranking Attuariale DeFi
         </h2>
         <p style={{ marginBottom: '2rem' }}>
@@ -108,7 +108,9 @@ export default function AttuarioRanking() {
         </p>
 
         {/* Controls */}
-        <div
+        <form
+          aria-label="Filtri di ranking"
+          onSubmit={(e) => e.preventDefault()}
           style={{
             display: 'grid',
             gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
@@ -121,14 +123,19 @@ export default function AttuarioRanking() {
           }}
         >
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+            <label 
+              htmlFor="risk-free-rate"
+              style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}
+            >
               Risk-free rate (%)
             </label>
             <input
+              id="risk-free-rate"
               type="number"
               value={rf}
               onChange={(e) => setRf(parseFloat(e.target.value) || 0)}
               step="0.1"
+              aria-describedby="rf-description"
               style={{
                 width: '100%',
                 padding: '0.5rem',
@@ -138,16 +145,24 @@ export default function AttuarioRanking() {
                 color: '#fff',
               }}
             />
+            <span id="rf-description" style={{ display: 'none' }}>
+              Tasso risk-free per il calcolo del rendimento excess
+            </span>
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+            <label 
+              htmlFor="min-tvl"
+              style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}
+            >
               Min TVL (USD)
             </label>
             <input
+              id="min-tvl"
               type="number"
               value={minTVL}
               onChange={(e) => setMinTVL(parseFloat(e.target.value) || 0)}
               step="100000"
+              aria-describedby="tvl-description"
               style={{
                 width: '100%',
                 padding: '0.5rem',
@@ -157,17 +172,25 @@ export default function AttuarioRanking() {
                 color: '#fff',
               }}
             />
+            <span id="tvl-description" style={{ display: 'none' }}>
+              Valore minimo di Total Value Locked per filtrare i pool
+            </span>
           </div>
           <div>
-            <label style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}>
+            <label 
+              htmlFor="result-limit"
+              style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}
+            >
               Limite risultati
             </label>
             <input
+              id="result-limit"
               type="number"
               value={limit}
               onChange={(e) => setLimit(parseInt(e.target.value) || 50)}
               min="1"
               max="500"
+              aria-describedby="limit-description"
               style={{
                 width: '100%',
                 padding: '0.5rem',
@@ -177,18 +200,27 @@ export default function AttuarioRanking() {
                 color: '#fff',
               }}
             />
+            <span id="limit-description" style={{ display: 'none' }}>
+              Numero massimo di pool da visualizzare (massimo 500)
+            </span>
           </div>
-        </div>
+        </form>
 
         {/* Loading/Error states */}
         {isLoading && (
-          <div style={{ textAlign: 'center', padding: '2rem', color: '#7fffd4' }}>
-            Caricamento dati in corso...
+          <div 
+            role="status" 
+            aria-live="polite"
+            style={{ textAlign: 'center', padding: '2rem', color: '#7fffd4' }}
+          >
+            <span>Caricamento dati in corso...</span>
           </div>
         )}
 
         {error && (
           <div
+            role="alert"
+            aria-live="assertive"
             style={{
               padding: '1rem',
               background: '#2d1515',
@@ -205,13 +237,20 @@ export default function AttuarioRanking() {
         {/* Data table */}
         {data?.data && (
           <>
-            <div style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#a0f0e0' }}>
+            <div 
+              style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#a0f0e0' }}
+              role="status"
+              aria-live="polite"
+            >
               Mostrando {data.meta.returned} di {data.meta.total} pool | 
               Ultimo aggiornamento: {new Date(data.timestamp).toLocaleString('it-IT')}
             </div>
 
             <div style={{ overflowX: 'auto' }}>
               <table
+                role="table"
+                aria-label="Ranking pool DeFi"
+                aria-describedby="ranking-title"
                 style={{
                   width: '100%',
                   borderCollapse: 'collapse',
@@ -221,9 +260,11 @@ export default function AttuarioRanking() {
                 }}
               >
                 <thead style={{ background: '#0a0f14', color: '#00ffcc' }}>
-                  <tr>
+                  <tr role="row">
                     <th
                       onClick={() => handleSort('project')}
+                      role="columnheader"
+                      aria-sort={sortField === 'project' ? (sortDirection === 'asc' ? 'ascending' : 'descending') : 'none'}
                       style={{
                         padding: '1rem',
                         textAlign: 'left',
@@ -232,7 +273,19 @@ export default function AttuarioRanking() {
                         borderBottom: '2px solid #1f2d36',
                       }}
                     >
-                      Protocol {sortField === 'project' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      <button
+                        style={{
+                          background: 'none',
+                          border: 'none',
+                          color: 'inherit',
+                          font: 'inherit',
+                          cursor: 'pointer',
+                          padding: 0,
+                        }}
+                        aria-label="Ordina per protocollo"
+                      >
+                        Protocol {sortField === 'project' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      </button>
                     </th>
                     <th
                       onClick={() => handleSort('chain')}

@@ -15,15 +15,23 @@ import type {
 const DEFAULT_API_URL = 'https://yields.llama.fi';
 
 /**
- * Fetches JSON data from a given URL with error handling
+ * Fetches JSON data from a given URL with error handling and timeout
+ * @param url - The URL to fetch from
+ * @param timeoutMs - Timeout in milliseconds (default: 10000ms)
  */
-export async function fetchJSON<T>(url: string): Promise<T> {
+export async function fetchJSON<T>(url: string, timeoutMs: number = 10000): Promise<T> {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
+
   try {
     const response = await fetch(url, {
       headers: {
         'Accept': 'application/json',
       },
+      signal: controller.signal,
     });
+
+    clearTimeout(timeoutId);
 
     if (!response.ok) {
       throw new Error(
@@ -34,7 +42,12 @@ export async function fetchJSON<T>(url: string): Promise<T> {
     const data = await response.json();
     return data as T;
   } catch (error) {
+    clearTimeout(timeoutId);
+    
     if (error instanceof Error) {
+      if (error.name === 'AbortError') {
+        throw new Error(`Request timeout after ${timeoutMs}ms for ${url}`);
+      }
       throw new Error(`Failed to fetch data from ${url}: ${error.message}`);
     }
     throw new Error(`Failed to fetch data from ${url}: Unknown error`);

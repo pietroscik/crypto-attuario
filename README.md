@@ -23,6 +23,30 @@ Query parameters:
 - `minTVL`: Minimum TVL in USD (default: 1000000)
 - `limit`: Maximum results (default: 50, max: 500)
 
+**Resilience Features:**
+- Request timeout: 10 seconds (prevents hanging requests)
+- ISR caching: 60 second revalidation
+- Health check endpoint: `/api/health`
+- Automatic cache warming via Vercel Cron (every 5 minutes)
+
+See [ISR Cache Warming Documentation](./docs/ISR_CACHE_WARMING.md) for details.
+
+### 🏥 Health & Monitoring
+
+**Health Check Endpoint:** `GET /api/health`
+
+Basic health check:
+```bash
+curl https://your-domain.com/api/health
+```
+
+Health check with cache warming:
+```bash
+curl https://your-domain.com/api/health?warm=true
+```
+
+This endpoint is used by Vercel Cron to keep the ISR cache warm and ensure fast response times.
+
 ## Getting Started
 
 First, run the development server:
