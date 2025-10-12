@@ -3,6 +3,14 @@ import AdBanner from "../components/AdBanner";
 
 const articles = [
   {
+    title: "Modelli e algoritmi per le remunerazioni DeFi",
+    date: "22 gennaio 2025",
+    readTime: "6 min",
+    excerpt:
+      "Framework su VaR, Markowitz, RNN e un piano operativo in otto fasi per implementare strategie di remunerazione e incentivi su attuario.network.",
+    link: "/attuario-network-strategia",
+  },
+  {
     title: "Stress test attuariali sui protocolli di lending",
     date: "15 gennaio 2025",
     readTime: "8 min",
