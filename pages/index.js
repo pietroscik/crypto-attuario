@@ -3,6 +3,13 @@ import protocols from "../data/protocolsData";
 
 const services = [
   {
+    title: "Ranking Attuariale DeFi",
+    description:
+      "Classifica risk-adjusted in tempo reale dei pool DeFi più performanti, basata su dati DefiLlama.",
+    link: "/attuario",
+    cta: "Vedi ranking",
+  },
+  {
     title: "Calcolatori attuariali",
     description:
       "Strumenti interattivi per simulare staking, rendite e Value at Risk con ipotesi personalizzate.",
