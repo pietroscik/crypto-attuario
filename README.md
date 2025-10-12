@@ -1,5 +1,28 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+## Features
+
+### 📊 Actuarial Ranking (DefiLlama Integration)
+
+A live, risk-adjusted ranking of DeFi pools powered by [DefiLlama](https://defillama.com) data.
+
+**Key features:**
+- Real-time APY and TVL data from thousands of DeFi pools
+- Risk-adjusted index calculation: `(APY - rf) / Volatility Proxy`
+- Volatility proxy calculated as `|APY - APY_7d|` with fallback to 0.05
+- Sortable table by Protocol, Chain, APY, TVL, Volatility, and Risk-Adjusted Index
+- Auto-refresh every 60 seconds via SWR
+- Configurable parameters (risk-free rate, minimum TVL, result limit)
+
+**Access:** Visit `/attuario` to view the ranking dashboard.
+
+**API Endpoint:** `GET /api/attuario?rf=4.5&minTVL=1000000&limit=50`
+
+Query parameters:
+- `rf`: Risk-free rate percentage (default: 0)
+- `minTVL`: Minimum TVL in USD (default: 1000000)
+- `limit`: Maximum results (default: 50, max: 500)
+
 ## Getting Started
 
 First, run the development server:
@@ -16,9 +39,39 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Environment Variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copy `.env.example` to `.env.local` and configure:
+
+```bash
+cp .env.example .env.local
+```
+
+- `NEXT_PUBLIC_DEFI_LLAMA_API_URL`: DefiLlama API endpoint (default: https://yields.llama.fi)
+
+## Testing
+
+Run the test suite:
+
+```bash
+npm test
+```
+
+Run tests in watch mode:
+
+```bash
+npm run test:watch
+```
+
+## Project Structure
+
+- `/pages` - Pages Router pages (legacy, most UI pages)
+- `/app` - App Router (API routes)
+- `/src/lib` - Business logic and data fetching
+- `/src/types` - TypeScript type definitions
+- `/tests` - Test files
+- `/components` - Reusable React components
+- `/data` - Static data files
 
 ## Learn More
 

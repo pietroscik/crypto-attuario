@@ -149,6 +149,18 @@ export function normalizePools(pools: DefiLlamaPool[]): NormalizedPool[] {
  * Ranks pools based on risk-adjusted metric
  * Risk-adjusted metric = (APY - rf) / volProxy
  * where volProxy = |apy - apy7d| with fallback to 0.05
+ * 
+ * @param pools - Normalized pool data
+ * @param riskFreeRate - Risk-free rate as percentage (e.g., 4.5 for 4.5%)
+ * @param minTVL - Minimum TVL in USD to include in ranking
+ * @returns Ranked pools sorted by risk-adjusted metric (descending)
+ * 
+ * @remarks
+ * Alternative volProxy approaches when apy7d is missing:
+ * - Current: Use fixed default (0.05)
+ * - Future enhancement: Calculate rolling MAD (Median Absolute Deviation) 
+ *   from pools with similar characteristics (same protocol/chain/asset type)
+ * - Future enhancement: Use historical volatility from time-series data
  */
 export function rankPools(
   pools: NormalizedPool[],
