@@ -56,6 +56,9 @@ export default function NetworkHUD() {
 
   return (
     <div
+      role="status"
+      aria-live="polite"
+      aria-label={`Network status: ${getStatusText()}`}
       style={{
         position: 'fixed',
         top: '1rem',

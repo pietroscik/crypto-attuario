@@ -109,9 +109,21 @@ describe('Efficient Frontier Module', () => {
       const frontier = generateFrontier(expRet, cov, 10, [0, 1]);
       frontier.assetNames = ['BTC', 'ETH'];
 
-      const csv = exportFrontierCSV(frontier, frontier.assetNames);
+      const metadata = {
+        asOf: '2025-01-01',
+        tradingDays: 365,
+        shrinkage: 0.10,
+      };
 
-      // Check header
+      const csv = exportFrontierCSV(frontier, frontier.assetNames, metadata);
+
+      // Check metadata header
+      expect(csv).toContain('# Efficient Frontier Export');
+      expect(csv).toContain('# Generated: 2025-01-01');
+      expect(csv).toContain('# Trading Days per Year: 365');
+      expect(csv).toContain('# Covariance Shrinkage (alpha): 0.1');
+
+      // Check data header
       expect(csv).toContain('Risk,Return,Sharpe,Type,Weight_BTC,Weight_ETH');
 
       // Check that notable portfolios are included
@@ -122,9 +134,9 @@ describe('Efficient Frontier Module', () => {
       // Check sample points
       expect(csv).toContain('Sample');
 
-      // Count lines (header + 10 samples + 3 notable)
+      // Count lines (6 metadata + 1 data header + 10 samples + 3 notable)
       const lines = csv.trim().split('\n');
-      expect(lines.length).toBe(14);
+      expect(lines.length).toBe(20);
     });
   });
 });

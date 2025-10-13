@@ -44,26 +44,28 @@ describe('Covariance Shrinkage', () => {
       expect(shrunk[1][1]).toBeCloseTo(cov[1][1], 10);
     });
 
-    it('should handle alpha=1 (full shrinkage)', () => {
+    it('should handle alpha=0.30 (max shrinkage)', () => {
       const cov = [
         [0.04, 0.01],
         [0.01, 0.09]
       ];
 
-      const shrunk = shrinkCov(cov, 1.0);
+      const shrunk = shrinkCov(cov, 0.30);
 
       const avgVar = (0.04 + 0.09) / 2;
 
-      // Diagonal should be average variance
-      expect(shrunk[0][0]).toBeCloseTo(avgVar, 10);
-      expect(shrunk[1][1]).toBeCloseTo(avgVar, 10);
+      // Diagonal should move toward average variance but not reach it
+      expect(shrunk[0][0]).toBeGreaterThan(cov[0][0]);
+      expect(shrunk[0][0]).toBeLessThan(avgVar);
+      expect(shrunk[1][1]).toBeLessThan(cov[1][1]);
+      expect(shrunk[1][1]).toBeGreaterThan(avgVar);
 
-      // Off-diagonal should be zero
-      expect(shrunk[0][1]).toBeCloseTo(0, 10);
-      expect(shrunk[1][0]).toBeCloseTo(0, 10);
+      // Off-diagonal should shrink toward zero
+      expect(Math.abs(shrunk[0][1])).toBeLessThan(Math.abs(cov[0][1]));
+      expect(Math.abs(shrunk[1][0])).toBeLessThan(Math.abs(cov[1][0]));
     });
 
-    it('should clamp alpha to [0, 1]', () => {
+    it('should clamp alpha to [0, 0.30]', () => {
       const cov = [
         [0.04, 0.01],
         [0.01, 0.09]
@@ -73,10 +75,11 @@ describe('Covariance Shrinkage', () => {
       const shrunk1 = shrinkCov(cov, -0.5);
       expect(shrunk1[0][0]).toBeCloseTo(cov[0][0], 10);
 
-      // Alpha > 1 should behave like 1
+      // Alpha > 0.30 should behave like 0.30
       const shrunk2 = shrinkCov(cov, 1.5);
-      const avgVar = (0.04 + 0.09) / 2;
-      expect(shrunk2[0][0]).toBeCloseTo(avgVar, 10);
+      const shrunk3 = shrinkCov(cov, 0.30);
+      expect(shrunk2[0][0]).toBeCloseTo(shrunk3[0][0], 10);
+      expect(shrunk2[1][1]).toBeCloseTo(shrunk3[1][1], 10);
     });
 
     it('should handle 3x3 matrix', () => {

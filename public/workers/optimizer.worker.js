@@ -21,9 +21,12 @@ function portfolioVariance(weights, cov) {
 }
 
 function randomSimplex(n, bounds) {
-  const rand = Array(n).fill(0).map(() => Math.random());
-  const sum = rand.reduce((s, r) => s + r, 0);
-  let weights = rand.map(r => r / sum);
+  // Dirichlet-style simplex sampler for more uniform distribution
+  const x = Array(n).fill(0).map(() => -Math.log(Math.random()));
+  const s = x.reduce((a, b) => a + b, 0);
+  let weights = x.map(v => v / s);
+  
+  // Apply bounds and renormalize
   weights = weights.map(w => Math.max(bounds[0], Math.min(bounds[1], w)));
   const boundedSum = weights.reduce((s, w) => s + w, 0);
   if (boundedSum > 0) {
@@ -99,6 +102,12 @@ function maxSharpe(expRet, cov, rf = 0, bounds = [0, 1], numSamples = 2000) {
 // Worker message handler
 self.onmessage = function(e) {
   const { type, data } = e.data;
+  
+  // Handle terminate message
+  if (type === 'terminate') {
+    self.close();
+    return;
+  }
   
   try {
     let result;

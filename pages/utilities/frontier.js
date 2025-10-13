@@ -94,12 +94,18 @@ export default function EfficientFrontier() {
   const downloadCSV = () => {
     if (!frontierData) return;
 
-    const csv = exportFrontierCSV(frontierData, frontierData.assetNames);
+    const metadata = {
+      asOf: new Date().toISOString().split('T')[0],
+      tradingDays,
+      shrinkage,
+    };
+    
+    const csv = exportFrontierCSV(frontierData, frontierData.assetNames, metadata);
     const blob = new Blob([csv], { type: 'text/csv' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `efficient-frontier-${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `efficient-frontier-${metadata.asOf}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };

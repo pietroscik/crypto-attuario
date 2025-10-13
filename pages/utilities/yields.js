@@ -67,10 +67,16 @@ export default function YieldScreener() {
       filtered = filtered.filter(p => p.tvlUsd >= filters.minTvl);
     }
 
-    // Sort by APY descending
+    // Sort by APY descending (null-safe: treat missing as bottom)
     filtered.sort((a, b) => {
       const apyA = a.apy || a.apyBase || 0;
       const apyB = b.apy || b.apyBase || 0;
+      
+      // Handle null/undefined: place at bottom
+      if (!apyA && apyB) return 1;
+      if (apyA && !apyB) return -1;
+      if (!apyA && !apyB) return 0;
+      
       return apyB - apyA;
     });
 

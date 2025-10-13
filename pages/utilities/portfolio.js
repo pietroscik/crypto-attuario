@@ -208,40 +208,47 @@ export default function PortfolioUtilities() {
       const useWorker = workerRef.current !== null;
 
       if (useWorker) {
-        // Use worker for optimizations
-        const [rpWeights, msWeights] = await Promise.all([
-          new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => reject(new Error('Worker timeout')), 30000);
-            workerRef.current.onmessage = (e) => {
-              clearTimeout(timeout);
-              if (e.data.success && e.data.type === 'riskParity') {
-                resolve(e.data.result);
-              } else {
-                reject(new Error(e.data.error || 'Worker error'));
+        // Use worker for optimizations with timeout and cleanup
+        const createWorkerPromise = (type, data, timeoutMs = 5000) => {
+          return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+              workerRef.current?.terminate();
+              reject(new Error(`Worker timeout: ${type}`));
+            }, timeoutMs);
+            
+            const handleMessage = (e) => {
+              if (e.data.type === type) {
+                clearTimeout(timeout);
+                workerRef.current?.removeEventListener('message', handleMessage);
+                if (e.data.success) {
+                  resolve(e.data.result);
+                } else {
+                  reject(new Error(e.data.error || 'Worker error'));
+                }
               }
             };
-            workerRef.current.postMessage({ type: 'riskParity', data: { cov: covMatrix } });
-          }),
-          new Promise((resolve, reject) => {
-            const timeout = setTimeout(() => reject(new Error('Worker timeout')), 30000);
-            workerRef.current.onmessage = (e) => {
-              clearTimeout(timeout);
-              if (e.data.success && e.data.type === 'maxSharpe') {
-                resolve(e.data.result);
-              } else {
-                reject(new Error(e.data.error || 'Worker error'));
-              }
-            };
-            workerRef.current.postMessage({ 
-              type: 'maxSharpe', 
-              data: { expRet: expReturns, cov: covMatrix, rf: 0, bounds: [0, 1], numSamples: 2000 }
-            });
-          })
-        ]);
+            
+            workerRef.current?.addEventListener('message', handleMessage);
+            workerRef.current?.postMessage({ type, data });
+          });
+        };
 
-        equalWeights = equalWeight(assetNames.length);
-        riskParityWeights = rpWeights;
-        maxSharpeWeights = msWeights;
+        try {
+          const [rpWeights, msWeights] = await Promise.all([
+            createWorkerPromise('riskParity', { cov: covMatrix }),
+            createWorkerPromise('maxSharpe', { expRet: expReturns, cov: covMatrix, rf: 0, bounds: [0, 1], numSamples: 2000 })
+          ]);
+
+          equalWeights = equalWeight(assetNames.length);
+          riskParityWeights = rpWeights;
+          maxSharpeWeights = msWeights;
+        } catch (workerError) {
+          // Fallback to synchronous if worker fails
+          console.warn('Worker failed, using fallback:', workerError);
+          equalWeights = equalWeight(assetNames.length);
+          riskParityWeights = riskParity(covMatrix);
+          maxSharpeWeights = maxSharpe(expReturns, covMatrix, 0, [0, 1], 2000);
+        }
       } else {
         // Fallback to synchronous calculation
         equalWeights = equalWeight(assetNames.length);
@@ -381,8 +388,8 @@ export default function PortfolioUtilities() {
                 min="0"
                 max="0.30"
                 step="0.01"
-                value={shrinkage}
-                onChange={(e) => setShrinkage(Number(e.target.value))}
+                value={Math.max(0, Math.min(0.30, shrinkage))}
+                onChange={(e) => setShrinkage(Math.max(0, Math.min(0.30, Number(e.target.value))))}
                 style={{ width: '100%' }}
               />
             </div>
