@@ -1,5 +1,6 @@
 import Script from "next/script";
 import { ADSENSE_CLIENT_ID, ADSENSE_SLOT_ID } from "./adConfig";
+import NetworkHUD from "./NetworkHUD";
 
 export default function Layout({ children }) {
   return (
@@ -11,6 +12,9 @@ export default function Layout({ children }) {
         crossOrigin="anonymous"
         strategy="afterInteractive"
       />
+
+      {/* Network Status HUD */}
+      <NetworkHUD />
 
       <header className="header">
         <h1>Crypto-Attuario</h1>
