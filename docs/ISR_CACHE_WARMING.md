@@ -1,14 +1,14 @@
-# ISR Cache Warming with Vercel Cron
+# Riscaldamento della Cache ISR con Vercel Cron
 
-## Overview
+## Panoramica
 
-This project uses Vercel Cron to automatically warm the ISR (Incremental Static Regeneration) cache for the `/api/attuario` endpoint, ensuring fast response times and up-to-date data.
+Il progetto utilizza Vercel Cron per riscaldare automaticamente la cache ISR (Incremental Static Regeneration) dell'endpoint `/api/attuario`, garantendo risposte rapide e dati aggiornati.
 
-## Configuration
+## Configurazione
 
 ### vercel.json
 
-The `vercel.json` file configures a cron job that runs every 5 minutes:
+Il file `vercel.json` configura un cron job che gira ogni 5 minuti:
 
 ```json
 {
@@ -21,25 +21,25 @@ The `vercel.json` file configures a cron job that runs every 5 minutes:
 }
 ```
 
-### Schedule Options
+### Opzioni di schedulazione
 
-You can adjust the schedule in `vercel.json` using standard cron syntax:
+Puoi modificare la pianificazione in `vercel.json` usando la sintassi cron standard:
 
-- `*/5 * * * *` - Every 5 minutes (recommended for high-traffic sites)
-- `*/1 * * * *` - Every minute (for very high-traffic or critical data)
-- `0 * * * *` - Every hour (for low-traffic sites)
+- `*/5 * * * *` – ogni 5 minuti (consigliato per traffico medio-alto)
+- `*/1 * * * *` – ogni minuto (per dati critici o picchi elevati)
+- `0 * * * *` – ogni ora (per siti a basso traffico)
 
-## Health Check Endpoint
+## Endpoint di Health Check
 
 ### GET /api/health
 
-Basic health check without cache warming:
+Verifica di base senza riscaldamento cache:
 
 ```bash
 curl https://your-domain.com/api/health
 ```
 
-Response:
+Risposta:
 ```json
 {
   "status": "healthy",
@@ -51,13 +51,13 @@ Response:
 
 ### GET /api/health?warm=true
 
-Health check with ISR cache warming:
+Verifica con warmup della cache ISR:
 
 ```bash
 curl https://your-domain.com/api/health?warm=true
 ```
 
-Response:
+Risposta:
 ```json
 {
   "status": "healthy",
@@ -69,40 +69,40 @@ Response:
 }
 ```
 
-## Benefits
+## Benefici
 
-1. **Reduced Latency**: Users always get cached responses, avoiding cold starts
-2. **Fresh Data**: ISR cache is updated every 5 minutes with latest DeFi data
-3. **Resilience**: Health check continues to return 200 even if cache warming fails
-4. **Monitoring**: Cache status is included in health check response
+1. **Riduzione della latenza**: gli utenti ricevono sempre risposte da cache, evitando cold start
+2. **Dati freschi**: il cron mantiene caldo lo snapshot giornaliero generato via ISR
+3. **Resilienza**: l'health check continua a rispondere 200 anche se il warmup fallisce
+4. **Monitoraggio**: lo stato della cache è incluso nella risposta dell'health check
 
-## Monitoring
+## Monitoraggio
 
-You can monitor the cache warming by:
+Puoi monitorare il riscaldamento della cache tramite:
 
-1. **Vercel Dashboard**: Check Cron logs in your Vercel project
-2. **Health Endpoint**: Call `/api/health?warm=true` manually to verify
-3. **Application Logs**: Check console for "ISR warmup failed" messages
+1. **Vercel Dashboard**: controlla i log Cron del progetto
+2. **Endpoint Health**: chiama manualmente `/api/health?warm=true`
+3. **Log dell'applicazione**: cerca messaggi "ISR warmup failed"
 
 ## Troubleshooting
 
-### Cache warming fails
+### Il warmup fallisce
 
-If `cache_warmed: false` appears in the health check response:
+Se `cache_warmed: false` appare nella risposta:
 
-1. Check the `cache_error` field for details
-2. Verify the `/api/attuario` endpoint is working correctly
-3. Check Vercel function logs for timeout or network issues
+1. Controlla il campo `cache_error` per maggiori dettagli
+2. Verifica che l'endpoint `/api/attuario` risponda correttamente
+3. Consulta i log delle funzioni Vercel per timeout o problemi di rete
 
-### Cron not running
+### Il cron non viene eseguito
 
-1. Ensure `vercel.json` is committed to your repository
-2. Verify your Vercel project has Cron enabled (Pro plan required)
-3. Check Vercel Dashboard → Cron tab for execution logs
+1. Assicurati che `vercel.json` sia versionato nel repository
+2. Verifica che il progetto Vercel abbia Cron attivo (richiede piano Pro)
+3. Controlla nella dashboard di Vercel → scheda Cron per i log di esecuzione
 
-## Cost Considerations
+## Considerazioni sui costi
 
-- Vercel Cron is available on Pro plans and above
-- Each cron execution counts toward your serverless function invocations
-- Running every 5 minutes = ~8,640 invocations/month
-- Consider your plan limits and adjust schedule accordingly
+- Vercel Cron è disponibile dai piani Pro in su
+- Ogni esecuzione Cron conta come invocazione di funzione serverless
+- Esecuzione ogni 5 minuti = ~8.640 invocazioni/mese
+- Valuta i limiti del piano e adatta la schedulazione di conseguenza

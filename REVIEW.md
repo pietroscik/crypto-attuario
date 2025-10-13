@@ -1,129 +1,129 @@
-# Code Review Checklist - DefiLlama Integration
+# Checklist Code Review - Integrazione DefiLlama
 
-## ✅ Error Handling & Robustness
+## ✅ Gestione errori & Robustezza
 
 ### src/lib/defillama.ts
-- ✅ **Non-200 responses**: Handled in `fetchJSON()` with response.ok check
-- ✅ **Missing fields**: Filtered in `normalizePools()` - skips pools with missing chain/project/symbol
-- ✅ **Invalid data**: Filters pools with zero/negative TVL or negative APY
-- ✅ **Network errors**: Wrapped in try-catch blocks with error logging
-- ✅ **Type safety**: Full TypeScript type definitions in `src/types/defillama.ts`
+- ✅ **Risposte non 200**: gestite in `fetchJSON()` con controllo `response.ok`
+- ✅ **Campi mancanti**: filtrati in `normalizePools()` (esclude chain/project/symbol mancanti)
+- ✅ **Dati non validi**: scarta pool con TVL zero/negativo o APY negativo
+- ✅ **Errori di rete**: gestiti con try/catch e logging dedicato
+- ✅ **Type safety**: tipizzazioni complete in `src/types/defillama.ts`
 
 ### app/api/attuario/route.ts
-- ✅ **Parameter validation**: Checks for valid rf, minTVL, and limit ranges
-- ✅ **Empty data handling**: Returns 503 when no pools available
-- ✅ **Error responses**: Catches all errors and returns structured error messages
-- ✅ **HTTP status codes**: Appropriate codes (400 for bad request, 503 for service unavailable, 500 for server error)
+- ✅ **Validazione parametri**: controlla range per rf, minTVL e limit
+- ✅ **Gestione assenza dati**: restituisce 503 se non ci sono pool disponibili
+- ✅ **Risposte di errore**: messaggi strutturati per ogni eccezione
+- ✅ **Codici HTTP**: usa 400 per bad request, 503 per servizio non disponibile, 500 per errori interni
 
 ## ✅ Performance & Caching
 
-### ISR Configuration
-- ✅ **Revalidate interval**: 60 seconds (reasonable for DeFi data)
-- ✅ **Cache headers**: `s-maxage=60, stale-while-revalidate=120`
-- ✅ **Rationale**: DeFi yields change gradually; 60s refresh balances freshness with API load
+### Configurazione ISR
+- ✅ **Intervallo di revalidazione**: 60 secondi (equilibrio tra freschezza e carico API)
+- ✅ **Header cache**: `s-maxage=60, stale-while-revalidate=120`
+- ✅ **Motivazione**: gli yield DeFi variano gradualmente; 60s bilancia freschezza e limiti rate
 
-### Client Refresh
-- ✅ **SWR refresh**: 60 seconds via `refreshInterval: 60000`
-- ✅ **No focus revalidation**: Prevents excessive API calls
-- ✅ **Loading states**: Clear loading indicator while fetching
+### Refresh client
+- ✅ **Refresh SWR**: 60 secondi tramite `refreshInterval: 60000`
+- ✅ **No focus revalidation**: evita chiamate ridondanti
+- ✅ **Stati di caricamento**: indicatore visibile durante il fetch
 
-## ✅ Numerical Stability
+## ✅ Stabilità Numerica
 
-### Risk-Adjusted Metric Calculation
-- ✅ **Division by zero prevention**: `MIN_VOL_PROXY = 0.001` prevents extreme values
-- ✅ **Default volatility**: Falls back to 0.05 when apy7d missing
-- ✅ **Validation**: Checks for NaN and null values
-- ✅ **Formula**: `(APY - rf) / max(volProxy, 0.001)` ensures stable computation
+### Calcolo Risk-Adjusted Metric
+- ✅ **Prevenzione divisione per zero**: `MIN_VOL_PROXY = 0.01` evita valori estremi
+- ✅ **Volatilità di default**: fallback a 0.05 quando apy7d manca
+- ✅ **Validazione**: controlli su NaN e valori null
+- ✅ **Formula**: `(APY - rf) / max(volProxy, 0.001)` mantiene stabilità
 
-### Edge Cases Handled
-- ✅ Pools with identical APY and APY_7d → Uses minimum volatility
-- ✅ Missing apy7d → Uses default 0.05
-- ✅ Very low volatility → Capped at 0.001 to prevent infinite ratios
+### Edge case gestiti
+- ✅ Pool con APY identico ad APY_7d → usa volatilità minima
+- ✅ apy7d mancante → ricorre al valore di default 0.05
+- ✅ Volatilità molto bassa → cap a 0.01 per evitare rapporti infiniti
 
-## ✅ UI/UX Improvements
+## ✅ UI/UX
 
-### Loading States
-- ✅ Loading indicator: "Caricamento dati in corso..."
-- ✅ Error display: Red error box with message
+### Stati di caricamento
+- ✅ Indicatore di caricamento: "Caricamento dati in corso..."
+- ✅ Box errore: messaggio in rosso con dettaglio
 
 ### Error Boundaries
-- ⚠️ **Recommendation**: Consider adding React Error Boundary component
-- Current: Errors handled at component level with state
-- Future: Wrap page in ErrorBoundary for crash protection
+- ⚠️ **Suggerimento**: valutare un componente React Error Boundary
+- Stato attuale: errori gestiti a livello di componente con state
+- Futuro: incapsulare la pagina in un ErrorBoundary per maggiore resilienza
 
-### User Feedback
-- ✅ Last update timestamp displayed
-- ✅ Result count shown (X of Y pools)
-- ✅ Sortable columns with visual indicators
-- ✅ Configurable parameters with sensible defaults
+### Feedback utente
+- ✅ Timestamp ultimo aggiornamento visibile
+- ✅ Conteggio risultati mostrato (X di Y pool)
+- ✅ Colonne ordinabili con indicatori visivi
+- ✅ Parametri configurabili con default sensati
 
-## 📊 Alternative Approaches for volProxy
+## 📊 Approcci alternativi per volProxy
 
-### Current Implementation
-Uses `|APY - APY_7d|` with fallback to 0.05 when missing.
+### Implementazione attuale
+Usa `|APY - APY_7d|` con fallback a 0.05.
 
-### Suggested Enhancements (Future)
+### Migliorie suggerite (futuro)
 
 1. **Rolling MAD (Median Absolute Deviation)**
    ```typescript
-   // Calculate MAD from pools with similar characteristics
-   const similarPools = pools.filter(p => 
+   // Calcolo MAD su pool con caratteristiche simili
+   const similarPools = pools.filter(p =>
      p.project === pool.project || p.chain === pool.chain
    );
    const median = calculateMedian(similarPools.map(p => p.apy));
    const mad = calculateMedian(similarPools.map(p => Math.abs(p.apy - median)));
    ```
 
-2. **Protocol-specific volatility**
+2. **Volatilità specifica per protocollo**
    ```typescript
-   // Use average volatility from same protocol
+   // Media volatilità per lo stesso protocollo
    const protocolPools = pools.filter(p => p.project === pool.project);
    const avgVol = mean(protocolPools.map(p => Math.abs(p.apy - p.apy7d)));
    ```
 
-3. **Time-series historical data**
-   - Fetch historical APY data from DefiLlama's chart endpoints
-   - Calculate standard deviation over 30/60/90 days
-   - More accurate but requires additional API calls
+3. **Serie storiche**
+   - Recuperare serie APY storiche da endpoint chart di DefiLlama
+   - Calcolare deviazione standard su 30/60/90 giorni
+   - Più accurato ma richiede chiamate aggiuntive
 
-## 🔒 Security Considerations
+## 🔒 Considerazioni di Sicurezza
 
-- ✅ No user input directly used in SQL/commands
-- ✅ API parameters validated and sanitized
-- ✅ Rate limiting via ISR/caching
-- ✅ No sensitive data in client code
-- ✅ CORS handled by Next.js automatically
+- ✅ Nessun input utente usato direttamente in SQL/comandi
+- ✅ Parametri API validati e sanificati
+- ✅ Rate limiting indiretto tramite ISR/caching
+- ✅ Nessun dato sensibile nel codice client
+- ✅ CORS gestito automaticamente da Next.js
 
-## 📝 Documentation
+## 📝 Documentazione
 
-- ✅ README updated with feature description
-- ✅ API endpoint documented with parameters
-- ✅ Code comments explain business logic
-- ✅ Type definitions provide inline documentation
-- ✅ Test file documents expected behavior
+- ✅ README aggiornato con descrizione funzionalità
+- ✅ Endpoint API documentato con parametri
+- ✅ Commenti esplicano la logica di business
+- ✅ Tipizzazioni con documentazione inline
+- ✅ File di test descrivono il comportamento atteso
 
 ## ✅ Testing
 
-- ✅ 10 unit tests covering core functions
-- ✅ Edge cases tested (missing data, zero values, etc.)
-- ✅ Tests pass successfully
-- ✅ CI workflow configured
+- ✅ 10 unit test sulle funzioni core
+- ✅ Edge case coperti (dati mancanti, valori zero, ecc.)
+- ✅ Test al green
+- ✅ Workflow CI configurato
 
-## Overall Assessment
+## Valutazione complessiva
 
-**Status**: ✅ **Ready for Production**
+**Stato**: ✅ **Pronto per la produzione**
 
-The implementation is robust, well-tested, and handles edge cases appropriately. The risk-adjusted metric calculation is numerically stable, and the caching strategy is reasonable for DeFi data.
+L'implementazione è robusta, ben testata e gestisce correttamente gli edge case. Il calcolo dell'indicatore risk-adjusted è numericamente stabile e la strategia di caching è adeguata per dati DeFi.
 
-### Minor Improvements Suggested
-1. Add React Error Boundary for better crash handling
-2. Consider implementing one of the alternative volProxy approaches for pools missing apy7d
-3. Add rate limiting on API route if expecting high traffic
-4. Consider adding a "Last Updated" indicator per pool (not just global)
+### Miglioramenti minori suggeriti
+1. Aggiungere un React Error Boundary per una migliore gestione crash
+2. Valutare uno degli approcci alternativi a volProxy quando apy7d manca
+3. Considerare rate limiting sull'API in caso di traffico elevato
+4. Mostrare un indicatore "Ultimo aggiornamento" per singolo pool (non solo globale)
 
-### Architecture Decisions Made
-- ✅ Used App Router for API (modern Next.js pattern)
-- ✅ Used Pages Router for UI (consistent with existing codebase)
-- ✅ Minimal dependencies (only added SWR and Vitest)
-- ✅ TypeScript for type safety
-- ✅ ISR for optimal caching
+### Decisioni architetturali
+- ✅ App Router per le API (pattern moderno Next.js)
+- ✅ Pages Router per la UI (allineato alla codebase esistente)
+- ✅ Dipendenze minime (aggiunti solo SWR e Vitest)
+- ✅ TypeScript per sicurezza tipologica
+- ✅ ISR per caching ottimale

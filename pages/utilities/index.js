@@ -1,6 +1,6 @@
 /**
- * Utilities Hub - Main Index Page
- * Gateway to portfolio analytics and arbitrage scanner
+ * Utilities Hub - Pagina indice principale
+ * Punto di accesso ad analytics di portafoglio e scanner di arbitraggio
  */
 
 import Layout from '../../components/Layout';
@@ -10,31 +10,31 @@ export default function UtilitiesHub() {
   const tools = [
     {
       title: 'Portfolio Analytics',
-      description: 'Analizza portafogli crypto con ottimizzatori (Equal Weight, Risk Parity, Max Sharpe), backtesting walk-forward, e metriche risk-adjusted complete.',
+      description: 'Analizza portafogli crypto con ottimizzatori (Equal Weight, Risk Parity, Max Sharpe), backtesting walk-forward e metriche risk-adjusted complete.',
       link: '/utilities/portfolio',
       icon: '📊',
-      features: ['Sharpe Ratio', 'Sortino Ratio', 'Max Drawdown', 'Backtest 3+ anni'],
+      features: ['Rapporto di Sharpe', 'Rapporto di Sortino', 'Max Drawdown', 'Backtest 3+ anni'],
     },
     {
       title: 'Efficient Frontier',
       description: 'Visualizza la frontiera efficiente e confronta strategie di portfolio con scatter chart interattivo. Export CSV disponibile.',
       link: '/utilities/frontier',
       icon: '📈',
-      features: ['1k-2k portfolio samples', 'EW/RP/MaxSharpe highlights', 'CSV export', 'Shrinkage tuning'],
+      features: ['1k-2k portafogli campionati', 'Highlight EW/RP/MaxSharpe', 'Export CSV', 'Regolazione shrinkage'],
     },
     {
       title: 'Yield Screener',
       description: 'Esplora opportunità di yield DeFi da DeFiLlama. Filtra per chain, TVL e age. Solo informativo - DYOR sempre.',
       link: '/utilities/yields',
       icon: '💰',
-      features: ['Multi-chain yields', 'TVL & APY filters', 'Impermanent Loss info', 'Educational only'],
+      features: ['Yields multi-chain', 'Filtri TVL & APY', 'Alert impermanent loss', 'Solo educativo'],
     },
     {
       title: 'Arbitrage Scanner',
       description: 'Scanner simulato di opportunità di arbitraggio tra exchange. Considera fee, slippage e calcola spread netti. Solo a scopo educativo.',
       link: '/utilities/arbitrage',
       icon: '🔄',
-      features: ['Multi-venue scan', 'Fee modeling', 'P&L simulation', 'Educational only'],
+      features: ['Scan multi-venue', 'Modellazione fee', 'Simulazione P&L', 'Solo educativo'],
     },
   ];
 
@@ -53,7 +53,7 @@ export default function UtilitiesHub() {
             Strumenti Avanzati
           </p>
           <h1 style={{ fontSize: '3rem', margin: '0.5rem 0', color: '#00ffcc' }}>
-            Utilities Hub
+            Hub Utility
           </h1>
           <p style={{ fontSize: '1.2rem', color: '#c0c0c0', maxWidth: '700px', margin: '0 auto', lineHeight: 1.6 }}>
             Suite di strumenti quantitativi per l'analisi di portafogli crypto, 
@@ -61,7 +61,7 @@ export default function UtilitiesHub() {
           </p>
         </header>
 
-        {/* Tools Grid */}
+        {/* Griglia strumenti */}
         <section style={{ 
           display: 'grid', 
           gridTemplateColumns: 'repeat(auto-fit, minmax(450px, 1fr))', 
@@ -117,7 +117,7 @@ export default function UtilitiesHub() {
           ))}
         </section>
 
-        {/* Key Features */}
+        {/* Caratteristiche principali */}
         <section style={{ 
           background: '#11161d', 
           borderRadius: '12px', 
@@ -190,7 +190,7 @@ export default function UtilitiesHub() {
           </div>
         </section>
 
-        {/* Technical Details */}
+        {/* Dettagli tecnici */}
         <section style={{ 
           background: '#11161d', 
           borderRadius: '12px', 

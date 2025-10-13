@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import Layout from '../components/Layout';
 import useSWR from 'swr';
 
@@ -30,7 +30,13 @@ interface ApiResponse {
   timestamp: string;
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json());
+const fetcher = async (url: string) => {
+  const res = await fetch(url);
+  if (!res.ok) {
+    throw new Error('Richiesta snapshot non riuscita');
+  }
+  return res.json();
+};
 
 export default function AttuarioRanking() {
   const [rf, setRf] = useState(4.5);
@@ -39,14 +45,40 @@ export default function AttuarioRanking() {
   const [sortField, setSortField] = useState<keyof RankedPool>('riskAdjustedMetric');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
-  const { data, error, isLoading } = useSWR<ApiResponse>(
-    `/api/attuario?rf=${rf}&minTVL=${minTVL}&limit=${limit}`,
+  const { data: snapshot, error, isLoading } = useSWR<ApiResponse>(
+    '/api/attuario',
     fetcher,
     {
-      refreshInterval: 60000, // Refresh every 60 seconds
       revalidateOnFocus: false,
     }
   );
+
+  const { filteredPools, filteredTotal } = useMemo(() => {
+    if (!snapshot?.data) {
+      return { filteredPools: [] as RankedPool[], filteredTotal: 0 };
+    }
+
+    const poolsWithAdjustments = snapshot.data
+      .map((pool) => {
+        const safeVolProxy = pool.volProxy > 0 ? pool.volProxy : 0.01;
+        const adjustedMetric = (pool.apy - rf) / safeVolProxy;
+
+        return {
+          ...pool,
+          riskAdjustedMetric: adjustedMetric,
+        };
+      })
+      .filter((pool) => pool.tvlUsd >= minTVL);
+
+    const sortedByRisk = [...poolsWithAdjustments].sort(
+      (a, b) => b.riskAdjustedMetric - a.riskAdjustedMetric
+    );
+
+    return {
+      filteredPools: sortedByRisk.slice(0, limit),
+      filteredTotal: poolsWithAdjustments.length,
+    };
+  }, [snapshot, rf, minTVL, limit]);
 
   const handleSort = (field: keyof RankedPool) => {
     if (sortField === field) {
@@ -58,9 +90,9 @@ export default function AttuarioRanking() {
   };
 
   const getSortedData = () => {
-    if (!data?.data) return [];
-    
-    const sorted = [...data.data].sort((a, b) => {
+    if (!filteredPools.length) return [];
+
+    const sorted = [...filteredPools].sort((a, b) => {
       const aVal = a[sortField];
       const bVal = b[sortField];
       
@@ -102,12 +134,12 @@ export default function AttuarioRanking() {
           Ranking Attuariale DeFi
         </h2>
         <p style={{ marginBottom: '2rem' }}>
-          Classifica risk-adjusted dei pool DeFi più performanti, 
-          basata su dati in tempo reale da DefiLlama. 
+          Classifica risk-adjusted dei pool DeFi più performanti,
+          basata su snapshot giornalieri di DefiLlama.
           Il Risk-Adjusted Index è calcolato come (APY - rf) / Volatilità Proxy.
         </p>
 
-        {/* Controls */}
+        {/* Controlli */}
         <form
           aria-label="Filtri di ranking"
           onSubmit={(e) => e.preventDefault()}
@@ -127,7 +159,7 @@ export default function AttuarioRanking() {
               htmlFor="risk-free-rate"
               style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}
             >
-              Risk-free rate (%)
+              Tasso privo di rischio (%)
             </label>
             <input
               id="risk-free-rate"
@@ -154,7 +186,7 @@ export default function AttuarioRanking() {
               htmlFor="min-tvl"
               style={{ display: 'block', marginBottom: '0.5rem', fontSize: '0.9rem' }}
             >
-              Min TVL (USD)
+              TVL minimo (USD)
             </label>
             <input
               id="min-tvl"
@@ -206,7 +238,7 @@ export default function AttuarioRanking() {
           </div>
         </form>
 
-        {/* Loading/Error states */}
+        {/* Stati di caricamento/errore */}
         {isLoading && (
           <div 
             role="status" 
@@ -234,22 +266,22 @@ export default function AttuarioRanking() {
           </div>
         )}
 
-        {/* Data table */}
-        {data?.data && (
+        {/* Tabella dati */}
+        {filteredPools.length > 0 && snapshot?.timestamp && (
           <>
-            <div 
+            <div
               style={{ marginBottom: '1rem', fontSize: '0.9rem', color: '#a0f0e0' }}
               role="status"
               aria-live="polite"
             >
-              Mostrando {data.meta.returned} di {data.meta.total} pool | 
-              Ultimo aggiornamento: {new Date(data.timestamp).toLocaleString('it-IT')}
+              Mostrando {filteredPools.length} di {filteredTotal} pool |
+              Ultimo aggiornamento: {new Date(snapshot.timestamp).toLocaleString('it-IT')}
             </div>
 
             <div style={{ overflowX: 'auto' }}>
               <table
                 role="table"
-                aria-label="Ranking pool DeFi"
+                aria-label="Classifica pool DeFi"
                 aria-describedby="ranking-title"
                 style={{
                   width: '100%',
@@ -284,7 +316,7 @@ export default function AttuarioRanking() {
                         }}
                         aria-label="Ordina per protocollo"
                       >
-                        Protocol {sortField === 'project' && (sortDirection === 'asc' ? '↑' : '↓')}
+                        Protocollo {sortField === 'project' && (sortDirection === 'asc' ? '↑' : '↓')}
                       </button>
                     </th>
                     <th
@@ -297,7 +329,7 @@ export default function AttuarioRanking() {
                         borderBottom: '2px solid #1f2d36',
                       }}
                     >
-                      Chain {sortField === 'chain' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      Rete {sortField === 'chain' && (sortDirection === 'asc' ? '↑' : '↓')}
                     </th>
                     <th
                       onClick={() => handleSort('symbol')}
@@ -309,7 +341,7 @@ export default function AttuarioRanking() {
                         borderBottom: '2px solid #1f2d36',
                       }}
                     >
-                      Symbol {sortField === 'symbol' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      Simbolo {sortField === 'symbol' && (sortDirection === 'asc' ? '↑' : '↓')}
                     </th>
                     <th
                       onClick={() => handleSort('apy')}
@@ -345,7 +377,7 @@ export default function AttuarioRanking() {
                         borderBottom: '2px solid #1f2d36',
                       }}
                     >
-                      Vol. Proxy {sortField === 'volProxy' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      Proxy Vol. {sortField === 'volProxy' && (sortDirection === 'asc' ? '↑' : '↓')}
                     </th>
                     <th
                       onClick={() => handleSort('riskAdjustedMetric')}
@@ -357,7 +389,7 @@ export default function AttuarioRanking() {
                         borderBottom: '2px solid #1f2d36',
                       }}
                     >
-                      Risk-Adj Index {sortField === 'riskAdjustedMetric' && (sortDirection === 'asc' ? '↑' : '↓')}
+                      Indice Risk-Adj {sortField === 'riskAdjustedMetric' && (sortDirection === 'asc' ? '↑' : '↓')}
                     </th>
                   </tr>
                 </thead>
@@ -420,6 +452,23 @@ export default function AttuarioRanking() {
           </>
         )}
 
+        {snapshot && !isLoading && filteredPools.length === 0 && (
+          <div
+            role="status"
+            aria-live="polite"
+            style={{
+              padding: '1.5rem',
+              background: '#11161d',
+              borderRadius: '8px',
+              border: '1px solid #1f2d36',
+              color: '#a0f0e0',
+              textAlign: 'center',
+            }}
+          >
+            Nessun pool trovato con i filtri selezionati. Prova a modificare i parametri.
+          </div>
+        )}
+
         {/* Info box */}
         <div
           style={{
@@ -438,9 +487,9 @@ export default function AttuarioRanking() {
             excess (APY - risk-free rate) normalizzato per la volatilità proxy.
           </p>
           <p style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
-            <strong>Volatilità Proxy:</strong> Calcolata come |APY - APY_7d|. 
-            Se non disponibile, viene usato un valore di default (0.05). 
-            Un minimo di 0.001 è applicato per evitare divisioni per valori prossimi allo zero.
+            <strong>Volatilità Proxy:</strong> Calcolata come |APY - APY_7d|.
+            Se non disponibile, viene usato un valore di default (0.05).
+            Un minimo di 0.01 è applicato per evitare divisioni per valori prossimi allo zero.
           </p>
           <p style={{ lineHeight: 1.6 }}>
             <strong>Fonte dati:</strong> <a
@@ -450,7 +499,7 @@ export default function AttuarioRanking() {
               style={{ color: '#00ffcc' }}
             >
               DefiLlama
-            </a> - Aggiornamento automatico ogni 60 secondi.
+            </a> - Snapshot giornaliero con aggiornamento automatico ogni 24 ore.
           </p>
         </div>
       </section>
