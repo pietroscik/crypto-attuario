@@ -31,6 +31,56 @@ Query parameters:
 
 See [ISR Cache Warming Documentation](./docs/ISR_CACHE_WARMING.md) for details.
 
+### 🛠️ Utilities Hub
+
+Advanced quantitative tools for portfolio analysis, optimization, and arbitrage scanning.
+
+**Access:** Visit `/utilities` to explore the tools.
+
+#### Portfolio Analytics (`/utilities/portfolio`)
+
+Comprehensive portfolio analytics with multiple optimization strategies:
+
+**Features:**
+- **3 Optimization Strategies:** Equal Weight, Risk Parity, Max Sharpe Ratio
+- **Risk Metrics:** Sharpe, Sortino, Calmar, Volatility, Max Drawdown, VaR, Expected Shortfall
+- **Backtesting:** Walk-forward backtesting with monthly rebalancing
+- **Asset Selection:** Choose 2-10 crypto assets from popular options
+- **Customizable Horizon:** Analyze portfolios over 30-365 days
+- **Export-ready:** All weights and metrics calculated client-side
+
+**Technical Details:**
+- Pure JavaScript implementations (no heavy dependencies)
+- Grid/random search optimization on simplex for max Sharpe
+- Iterative coordinate descent for Risk Parity
+- Returns calculations: arithmetic and log returns
+- Covariance matrix estimation from historical data
+- Annualization: 252 trading periods per year
+
+#### Arbitrage Scanner (`/utilities/arbitrage`)
+
+**⚠️ EDUCATIONAL PURPOSES ONLY - Simulated paper trading**
+
+Scans for arbitrage opportunities between simulated exchange venues.
+
+**Features:**
+- Multi-venue price differential scanning
+- Configurable fee models (conservative vs optimistic)
+- Net spread calculation after fees and withdrawal costs
+- Estimated P&L for simulated trades
+- Real-time price data from CoinGecko API
+- Customizable minimum spread threshold
+
+**Disclaimer:** This tool is completely simulated and does NOT execute any real trades. It is provided solely for educational purposes to demonstrate arbitrage concepts. Not financial advice.
+
+**Data Sources:**
+- Price data: CoinGecko Public API
+- Simulated venues: Binance, Coinbase, Kraken, Bybit (with random variations for demonstration)
+
+**Fee Models:**
+- Conservative: 0.4% taker, 0.1% withdrawal
+- Optimistic: 0.2% taker, 0.05% withdrawal
+
 ### 🏥 Health & Monitoring
 
 **Health Check Endpoint:** `GET /api/health`

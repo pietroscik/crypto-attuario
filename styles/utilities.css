@@ -1,0 +1,319 @@
+/**
+ * Utilities Hub CSS Styles
+ * Consistent styling for portfolio and arbitrage tools
+ */
+
+/* KPI Card Styles */
+.utilities-metric__card {
+  background: #11161d;
+  border: 1px solid #1f2d36;
+  border-radius: 8px;
+  padding: 1rem;
+  transition: all 0.2s ease;
+}
+
+.utilities-metric__card:hover {
+  border-color: #00ffcc;
+  transform: translateY(-2px);
+}
+
+.utilities-metric__title {
+  font-size: 0.85rem;
+  color: #7fffd4;
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05rem;
+  font-weight: 500;
+}
+
+.utilities-metric__value {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #f5f5f5;
+  margin-bottom: 0.25rem;
+}
+
+.utilities-metric__unit {
+  font-size: 1rem;
+  color: #c0c0c0;
+  margin-left: 0.25rem;
+}
+
+.utilities-metric__delta {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+  font-weight: 500;
+}
+
+/* Delta Colors */
+.delta-positive {
+  color: #00ff88;
+}
+
+.delta-negative {
+  color: #ff4444;
+}
+
+.delta-neutral {
+  color: #c0c0c0;
+}
+
+/* Tabs */
+.utilities-tabs {
+  display: flex;
+  gap: 1rem;
+  border-bottom: 1px solid #1f2d36;
+  margin-bottom: 1.5rem;
+}
+
+.utilities-tab {
+  padding: 0.75rem 1.5rem;
+  background: none;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: #c0c0c0;
+  cursor: pointer;
+  font-size: 1rem;
+  text-transform: capitalize;
+  transition: all 0.2s ease;
+}
+
+.utilities-tab:hover {
+  color: #00ffcc;
+}
+
+.utilities-tab--active {
+  border-bottom-color: #00ffcc;
+  color: #00ffcc;
+}
+
+/* Tables */
+.utilities-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #11161d;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.utilities-table thead {
+  background: #1f2d36;
+}
+
+.utilities-table th {
+  padding: 1rem;
+  text-align: left;
+  color: #00ffcc;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.utilities-table tbody tr {
+  border-top: 1px solid #1f2d36;
+  transition: background 0.2s ease;
+}
+
+.utilities-table tbody tr:hover {
+  background: #1a2028;
+}
+
+.utilities-table td {
+  padding: 1rem;
+  color: #f5f5f5;
+  font-size: 0.95rem;
+}
+
+/* Buttons */
+.utilities-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  border: none;
+  background: #00ffcc;
+  color: #000;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.utilities-btn:hover:not(:disabled) {
+  background: #00e6b8;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 255, 204, 0.3);
+}
+
+.utilities-btn:disabled {
+  background: #555;
+  color: #999;
+  cursor: not-allowed;
+}
+
+.utilities-btn--secondary {
+  background: #1f2d36;
+  color: #00ffcc;
+  border: 1px solid #00ffcc;
+}
+
+.utilities-btn--secondary:hover:not(:disabled) {
+  background: #2a3d4a;
+}
+
+/* Asset Selection Chips */
+.utilities-chip {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 6px;
+  border: 1px solid #1f2d36;
+  background: #0d1117;
+  color: #c0c0c0;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.utilities-chip:hover {
+  border-color: #00ffcc;
+  background: #00ffcc20;
+}
+
+.utilities-chip--selected {
+  border: 2px solid #00ffcc;
+  background: #00ffcc20;
+  color: #00ffcc;
+  font-weight: bold;
+}
+
+/* Badges */
+.utilities-badge {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 12px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+
+.utilities-badge--simulated {
+  background: #4a1a4a;
+  color: #ff88ff;
+}
+
+.utilities-badge--success {
+  background: #1a4a1a;
+  color: #88ff88;
+}
+
+.utilities-badge--warning {
+  background: #4a3a1a;
+  color: #ffcc88;
+}
+
+.utilities-badge--info {
+  background: #1a3a4a;
+  color: #88ccff;
+}
+
+/* Banners */
+.utilities-banner {
+  padding: 1.5rem;
+  border-radius: 12px;
+  border: 3px solid;
+  margin-bottom: 2rem;
+}
+
+.utilities-banner--danger {
+  background: #4a1a1a;
+  border-color: #ff4444;
+  color: #ffcccc;
+}
+
+.utilities-banner--warning {
+  background: #1a1a2e;
+  border-color: #ffa500;
+  color: #ffcc88;
+}
+
+.utilities-banner--info {
+  background: #1a2a3a;
+  border-color: #00ccff;
+  color: #ccf0ff;
+}
+
+.utilities-banner h2,
+.utilities-banner h3 {
+  margin-top: 0;
+  margin-bottom: 0.75rem;
+}
+
+/* Loading States */
+.utilities-loading {
+  text-align: center;
+  padding: 3rem;
+  color: #7fffd4;
+}
+
+.utilities-loading__spinner {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border: 4px solid #1f2d36;
+  border-top-color: #00ffcc;
+  border-radius: 50%;
+  animation: utilities-spin 1s linear infinite;
+}
+
+@keyframes utilities-spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Error Messages */
+.utilities-error {
+  background: #4a1a1a;
+  border: 1px solid #ff4444;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 2rem;
+  color: #ff8888;
+}
+
+/* Grid Layouts */
+.utilities-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.utilities-grid--2 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+.utilities-grid--3 {
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+}
+
+.utilities-grid--4 {
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .utilities-tabs {
+    flex-wrap: wrap;
+  }
+
+  .utilities-tab {
+    font-size: 0.9rem;
+    padding: 0.6rem 1rem;
+  }
+
+  .utilities-table {
+    font-size: 0.85rem;
+  }
+
+  .utilities-table th,
+  .utilities-table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  .utilities-metric__value {
+    font-size: 1.25rem;
+  }
+}
