@@ -1,7 +1,7 @@
 /**
  * API Route: /api/health
  * Health check endpoint for monitoring and ISR pre-warming
- * 
+ *
  * Can be called by Vercel Cron to keep the /api/attuario endpoint warm
  * and ensure ISR cache is regularly updated
  */
@@ -13,10 +13,10 @@ export const dynamic = 'force-dynamic';
 export async function GET(request: NextRequest) {
   try {
     const baseUrl = request.nextUrl.origin;
-    
+
     // Check if we should warm the ISR cache
     const warmCache = request.nextUrl.searchParams.get('warm') === 'true';
-    
+
     const health = {
       status: 'healthy',
       timestamp: new Date().toISOString(),
@@ -27,7 +27,7 @@ export async function GET(request: NextRequest) {
     if (warmCache) {
       // Trigger ISR cache warming by calling the attuario endpoint
       try {
-        const warmupResponse = await fetch(`${baseUrl}/api/attuario?rf=4.5&minTVL=1000000&limit=50`, {
+        const warmupResponse = await fetch(`${baseUrl}/api/attuario`, {
           headers: {
             'User-Agent': 'crypto-attuario-health-check',
           },
@@ -60,7 +60,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(health);
   } catch (error) {
     console.error('Health check error:', error);
-    
+
     return NextResponse.json(
       {
         status: 'unhealthy',
