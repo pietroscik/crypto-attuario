@@ -20,6 +20,7 @@ export default function Layout({ children }) {
           <a href="/staking">Staking</a>
           <a href="/rendita">Rendita</a>
           <a href="/var">VaR</a>
+          <a href="/utilities">Utility</a>
           <a href="/pensione">Pensione</a>
           <a href="/confronto">DeFi vs TradFi</a>
           <a href="/sponsor">Collabora</a>

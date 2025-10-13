@@ -1,46 +1,91 @@
 import Layout from "../components/Layout";
 import protocols from "../data/protocolsData";
+import "../styles/home.css";
+
+const heroMetrics = [
+  { value: "12,500+", label: "Pool monitorati" },
+  { value: "18 chain", label: "Copertura cross-chain" },
+  { value: "< 60s", label: "Aggiornamento feed" },
+];
 
 const services = [
   {
-    title: "Ranking Attuariale DeFi",
+    title: "Ranking attuariale DeFi",
     description:
-      "Classifica risk-adjusted in tempo reale dei pool DeFi più performanti, basata su dati DefiLlama. Utilizza metriche tipo Sharpe ratio per valutare il rendimento normalizzato per la volatilità, identificando opportunità con il miglior profilo rischio-rendimento.",
+      "Classifica dinamica dei pool con miglior profilo rischio/rendimento. Applichiamo metriche tipo Sharpe, Sortino e coverage ratio su dati DefiLlama aggiornati di continuo.",
     link: "/attuario",
-    cta: "Vedi ranking",
-    features: ["Auto-refresh 60s", "Sortable metrics", "Volatility analysis"]
+    cta: "Apri il ranking",
+    icon: "📊",
+    features: [
+      "Scoring risk-adjusted con refresh automatico",
+      "Indicatori di volatilità e drawdown massimo",
+      "Alert su anomalie di rendimento e liquidità",
+    ],
   },
   {
-    title: "Calcolatori attuariali",
+    title: "Stress test di portafoglio",
     description:
-      "Strumenti interattivi per simulare staking, rendite e Value at Risk con ipotesi personalizzate. Modella scenari di accumulo e distribuzione, proietta flussi cedolari futuri e stima la probabilità di perdite su orizzonti temporali definiti.",
+      "Simulazioni multi-scenario su collaterali, stablecoin e strategie leverage. Valutiamo l'impatto di shock di mercato, variazioni degli oracoli e correlazioni tra asset.",
+    link: "/var",
+    cta: "Lancia uno stress test",
+    icon: "🧮",
+    features: [
+      "Monte Carlo su volatilità storica",
+      "Analisi di sensitività sugli haircut",
+      "Report pronti per comitati investimenti",
+    ],
+  },
+  {
+    title: "Calcolatori di accumulo",
+    description:
+      "Modella piani di staking, rendita e pensionamento in chiave crypto. Confronta scenari con capitalizzazione composta, cashflow programmati e tassazione ipotetica.",
     link: "/staking",
     cta: "Simula rendimento",
-    features: ["Compound interest", "VaR analysis", "Custom scenarios"]
+    icon: "📈",
+    features: [
+      "Tassi variabili & capitalizzazione personalizzata",
+      "Proiezioni mensili e breakdown cedole",
+      "Esportazione dei risultati in PDF/CSV",
+    ],
   },
   {
-    title: "Protocolli monitorati",
+    title: "Osservatorio protocolli",
     description:
-      "Schede attuariali aggiornate su Aave, Lido, Curve, Uniswap e altri protocolli systemically relevant. Analisi approfondite di TVL, rischi operativi, smart contract audit, concentrazione della liquidità e metriche di governance.",
+      "Schede attuariali per Aave, Lido, Curve, Uniswap e protocolli emergenti. Approfondiamo TVL, concentrazione operatori, audit, fattori di rischio e governance.",
     link: "/defi",
-    cta: "Apri la dashboard",
-    features: ["4 major protocols", "Risk matrices", "Audit history"]
+    cta: "Consulta le schede",
+    icon: "🛡️",
+    features: [
+      "Heatmap dei fattori di rischio",
+      "Cronologia exploit e audit",
+      "Indicatori di liquidità cross-chain",
+    ],
   },
   {
-    title: "Analisi comparativa DeFi/TradFi",
+    title: "Benchmark DeFi vs TradFi",
     description:
-      "Benchmark quantitativi tra rendimento crypto, obbligazionario e prodotti assicurativi tradizionali. Confronta APY DeFi vs tassi governativi, valuta premi al rischio e identifica inefficienze di mercato tra i due ecosistemi finanziari.",
+      "Confronto quantitativo tra APY DeFi e tassi risk-free (Treasury, Euribor, polizze). Analizziamo il premio al rischio, la duration effettiva e la sostenibilità dei rendimenti.",
     link: "/confronto",
     cta: "Confronta scenari",
-    features: ["Yield comparison", "Risk premium", "Market efficiency"]
+    icon: "⚖️",
+    features: [
+      "Spread su curve governative",
+      "Analisi scenario bear/bull",
+      "Dashboard comparativa interattiva",
+    ],
   },
   {
     title: "Ricerca su misura",
     description:
-      "Supporto a desk di tesoreria, family office e operatori istituzionali per policy e governance DeFi. Costruzione di framework di risk management, stress testing su portafogli multi-protocollo e analisi di scenari macroeconomici.",
+      "Supporto a desk treasury, family office e assicurazioni per policy, governance e product design. Dalla definizione di KPI alla redazione di framework di risk management.",
     link: "/sponsor",
-    cta: "Richiedi briefing",
-    features: ["Custom research", "Risk frameworks", "Stress testing"]
+    cta: "Parla con noi",
+    icon: "🤝",
+    features: [
+      "Workshop dedicati al tuo team",
+      "Stress test regolamentari (ORSA, Solvency)",
+      "Playbook operativi personalizzati",
+    ],
   },
 ];
 
@@ -48,20 +93,26 @@ const methodology = [
   {
     title: "Framework attuariale",
     detail:
-      "Modelli basati su scenari, stress test di liquidità e metriche di solvibilità applicate alla DeFi. Utilizziamo tecniche di valutazione del rischio mutuate dalle compagnie assicurative e dai fondi pensione per quantificare l'esposizione e costruire buffer di capitale adeguati.",
-    icon: "📊"
+      "Costruiamo curve di sopravvivenza del capitale, analisi duration-liquidity e metriche di solvibilità applicate alla DeFi. Ogni protocollo viene classificato su più dimensioni di rischio.",
+    icon: "📐",
   },
   {
     title: "Data-driven",
     detail:
-      "Integrazione di dataset on-chain, feed oracolari e serie storiche per misurare volatilità e correlazioni. Analisi quantitativa di oltre 10.000 pool DeFi con granularità oraria, tracciamento di liquidazioni, slippage effettivo e profondità del book.",
-    icon: "📈"
+      "Integriamo dataset on-chain, feed oracolari, metriche di chain analytics e fonti macro (tassi risk-free, inflazione) per elaborare viste complete sugli scenari di mercato.",
+    icon: "🛰️",
   },
   {
     title: "Risk governance",
     detail:
-      "Linee guida operative per comitati investimenti e policy interne focalizzate sul controllo del rischio. Framework di asset allocation tattica, regole di rebalancing automatico e protocolli di gestione della crisi per minimizzare drawdown inaspettati.",
-    icon: "🛡️"
+      "Redigiamo linee guida per comitati investimenti, treasury DAO e operatori istituzionali. Definiamo policy di rebalancing, soglie di alert e processi di escalation.",
+    icon: "🛡️",
+  },
+  {
+    title: "Monitoraggio continuo",
+    detail:
+      "Automatizziamo il controllo di metriche critiche: health factor, collateral ratio, liquidazioni, concentrazione validatori, TVL per chain e segnali di stress del mercato.",
+    icon: "⏱️",
   },
 ];
 
@@ -69,59 +120,91 @@ const useCases = [
   {
     title: "Desk di tesoreria",
     detail:
-      "Gestisci esposizioni su stablecoin e protocolli lending con metriche di sensitività e VaR giornalieri. Monitora il rischio di controparte, ottimizza l'allocazione della liquidità tra chain multiple e costruisci strategie di hedging dinamico con derivati on-chain.",
-    icon: "🏦"
+      "Gestisci esposizioni su stablecoin e protocolli lending con VaR giornaliero, metriche di sensitività e policy di collateral management integrate nel tuo treasury stack.",
+    icon: "🏦",
   },
   {
     title: "Family office",
     detail:
-      "Costruisci strategie di rendita e successione utilizzando token staked e flussi cedolari DeFi. Pianifica distribuzione multi-generazionale del patrimonio crypto, ottimizza la fiscalità attraverso veicoli giuridici appropriati e massimizza yield sostenibile nel lungo periodo.",
-    icon: "👥"
+      "Costruisci strategie di rendita e successione crypto con prodotti di liquid staking, stablecoin e assicurazioni parametriche. Pianifica cashflow multi-generazionali in modo efficiente.",
+    icon: "👥",
   },
   {
     title: "Operatori fintech",
     detail:
-      "Integra servizi DeFi in prodotti retail mantenendo controlli su liquidità, KYC e compliance. Wrappa protocolli DeFi in interfacce user-friendly, gestisci custody segregata, implementa controlli AML/CTF e fornisci reporting regolamentare automatizzato.",
-    icon: "💼"
+      "Integra servizi DeFi in prodotti retail mantenendo controlli KYC/AML e misure di segregazione fondi. Offri reporting regolamentare automatizzato ai tuoi clienti.",
+    icon: "💼",
+  },
+  {
+    title: "DAO & protocolli",
+    detail:
+      "Supportiamo treasury decentralizzate nella definizione di metriche di rischio, stress test su emissioni token e politiche di incentivo sostenibili per la community.",
+    icon: "🧩",
   },
 ];
 
 const onboardingSteps = [
   {
     step: "01",
-    title: "Definisci gli obiettivi",
+    title: "Definisci obiettivi e vincoli",
     detail:
-      "Quantifica orizzonte temporale, propensione al rischio e vincoli di liquidità del tuo mandato. Determina target di rendimento annuo, drawdown massimo tollerabile e necessità di redemption a breve termine per costruire un profilo di rischio chiaro e misurabile.",
+      "Mappa orizzonte temporale, drawdown massimo tollerabile, vincoli di liquidità e requisiti regolamentari per costruire un profilo rischio/rendimento chiaro.",
   },
   {
     step: "02",
     title: "Seleziona gli strumenti",
     detail:
-      "Sfrutta calcolatori, schede protocollo e benchmark per scegliere le strategie più coerenti. Confronta rendimenti risk-adjusted, valuta concentrazione della liquidità, analizza audit di sicurezza e costruisci un portafoglio diversificato cross-chain e cross-protocol.",
+      "Utilizza ranking, dashboard e calcolatori per individuare strategie coerenti con il mandato. Valuta diversificazione cross-chain, qualità degli audit e profondità di mercato.",
   },
   {
     step: "03",
-    title: "Monitora e aggiorna",
+    title: "Monitora e reagisci",
     detail:
-      "Imposta alert e revisioni periodiche con i nostri modelli per mantenere il portafoglio in equilibrio. Ricevi notifiche su eventi critici (liquidazioni, exploit, governance proposals), traccia metriche in real-time e adatta l'allocazione a condizioni di mercato mutevoli.",
+      "Imposta alert personalizzati, schedule di revisione e metriche di early warning per mantenere il portafoglio allineato agli obiettivi e prevenire eventi avversi.",
   },
 ];
 
 const blogHighlights = [
   {
     title: "Stress test attuariali sui protocolli di lending",
-    excerpt: "Modelliamo scenari di liquidazione su Aave considerando oracoli e volatilità collateral.",
+    excerpt: "Simuliamo shock di volatilità, variazioni oracolari e liquidazioni su Aave con modelli stocastici.",
     link: "/protocols/aave",
   },
   {
     title: "Guida operativa per LP professionali su Uniswap v3",
-    excerpt: "Strategie di copertura e ribilanciamento automatico per ridurre l'impermanent loss.",
+    excerpt: "Costruisci strategie di copertura dinamica e automatizza il rebalancing per ridurre l'impermanent loss.",
     link: "/protocols/uniswap",
   },
   {
     title: "Checklist di governance per liquid staking",
-    excerpt: "Metriche da monitorare su Lido Finance tra centralizzazione e sostenibilità delle fee.",
+    excerpt: "Analizziamo KPI di decentralizzazione, performance e sostenibilità delle fee per Lido e competitor.",
     link: "/protocols/lido",
+  },
+  {
+    title: "Blueprint assicurativo per le DAO",
+    excerpt: "Framework per valutare polizze parametriche, fondi di garanzia e mutue on-chain.",
+    link: "/blog",
+  },
+];
+
+const utilityHighlights = [
+  {
+    title: "Yield screener in tempo reale",
+    description:
+      "Analisi dei pool più capitalizzati con breakdown APY base e reward, aggiornati con i dati pubblici di DeFiLlama.",
+    link: "/utilities#yield-screener",
+  },
+  {
+    title: "Monitor TVL e variazioni",
+    description:
+      "Dashboard sintetica con TVL e performance giornaliere/settimanali per i protocolli sistemici.",
+    link: "/utilities#protocol-monitor",
+  },
+  {
+    title: "Volatilità cross-asset",
+    description:
+      "Tracking di Bitcoin, Ethereum e Solana con variazione 24h per stimare la pressione di mercato.",
+    link: "/utilities#volatility",
   },
 ];
 
@@ -130,301 +213,233 @@ const featuredProtocols = ["aave", "uniswap", "curve", "lido"].map((slug) => ({
   ...protocols[slug],
 }));
 
+function SectionHeader({ kicker, title, description }) {
+  return (
+    <header className="section-header">
+      {kicker && <p className="section-header__kicker">{kicker}</p>}
+      <h2 className="section-header__title">{title}</h2>
+      {description && <p className="section-header__description">{description}</p>}
+    </header>
+  );
+}
+
 function Home() {
   return (
     <Layout>
-      <div style={{ maxWidth: "1080px", margin: "0 auto", padding: "3rem 1.5rem 4rem" }}>
-        <section style={{ marginBottom: "3rem" }}>
-          <p
-            style={{
-              textTransform: "uppercase",
-              letterSpacing: "0.2rem",
-              fontSize: "0.75rem",
-              color: "#7fffd4",
-            }}
-          >
-            Ricerca attuariale per la DeFi
-          </p>
-          <h1 style={{ fontSize: "3rem", margin: "0.75rem 0", color: "#00ffcc" }}>
-            Modelli quantitativi per decisioni crypto informate
-          </h1>
-          <p style={{ fontSize: "1.2rem", lineHeight: 1.8, maxWidth: "780px", marginBottom: "1.5rem" }}>
-            Crypto-Attuario combina metodi attuariali, dati on-chain e controllo del rischio per supportare investitori,
-            aziende e sviluppatori che operano nella finanza decentralizzata. Dalla costruzione di portafogli resilienti alla
-            definizione di policy interne.
-          </p>
-          
-          {/* Quick Stats */}
-          <div style={{ 
-            display: "grid", 
-            gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))", 
-            gap: "1rem", 
-            marginBottom: "1.5rem",
-            maxWidth: "780px"
-          }}>
-            <div style={{ 
-              padding: "1rem", 
-              background: "#11161d", 
-              borderRadius: "8px", 
-              border: "1px solid #1f2d36" 
-            }}>
-              <div style={{ fontSize: "1.8rem", color: "#00ffcc", fontWeight: "bold" }}>10,000+</div>
-              <div style={{ fontSize: "0.85rem", color: "#a0f0e0" }}>Pool DeFi analizzati</div>
+      <div className="home-wrapper">
+        <section className="hero">
+          <div>
+            <p className="hero__kicker">Ricerca attuariale per la DeFi</p>
+            <h1 className="hero__title">Modelli quantitativi per decisioni crypto informate</h1>
+            <p className="hero__description">
+              Crypto-Attuario combina tecniche attuariali, dati on-chain e risk engineering per supportare investitori,
+              aziende e sviluppatori che operano nella finanza decentralizzata. Dalla costruzione di portafogli resilienti
+              alla definizione di policy interne.
+            </p>
+            <div className="hero__metrics">
+              {heroMetrics.map((metric) => (
+                <div key={metric.label} className="metric-card">
+                  <span className="metric-card__value">{metric.value}</span>
+                  <span className="metric-card__label">{metric.label}</span>
+                </div>
+              ))}
             </div>
-            <div style={{ 
-              padding: "1rem", 
-              background: "#11161d", 
-              borderRadius: "8px", 
-              border: "1px solid #1f2d36" 
-            }}>
-              <div style={{ fontSize: "1.8rem", color: "#00ffcc", fontWeight: "bold" }}>4</div>
-              <div style={{ fontSize: "0.85rem", color: "#a0f0e0" }}>Protocolli monitorati</div>
-            </div>
-            <div style={{ 
-              padding: "1rem", 
-              background: "#11161d", 
-              borderRadius: "8px", 
-              border: "1px solid #1f2d36" 
-            }}>
-              <div style={{ fontSize: "1.8rem", color: "#00ffcc", fontWeight: "bold" }}>60s</div>
-              <div style={{ fontSize: "0.85rem", color: "#a0f0e0" }}>Aggiornamento dati</div>
+            <div className="hero__actions">
+              <a className="cta-btn" href="/utilities">
+                Esplora gli strumenti live
+              </a>
+              <a className="cta-btn secondary" href="/sponsor">
+                Parla con il team
+              </a>
             </div>
           </div>
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem", marginTop: "1.75rem" }}>
-            <a className="cta-btn" href="/confronto">
-              Esplora comparativa DeFi/TradFi
-            </a>
-            <a className="cta-btn secondary" href="/sponsor">
-              Parla con il team
-            </a>
+          <div className="tile tile--subtle">
+            <h3 className="tile__title">Perché un attuario in DeFi?</h3>
+            <p className="tile__description">
+              Applichiamo modelli di solvibilità e gestione del rischio tipici di assicurazioni e fondi pensione alla
+              complessità dei protocolli crypto. Monitoriamo metriche come collateral ratio, coverage, stress di liquidità e
+              concentrazione degli operatori per fornire insight azionabili.
+            </p>
+            <ul className="split-panel__list">
+              <li>➡️ Analisi indipendente basata su dati pubblici e oracoli certificati</li>
+              <li>➡️ Report con metodologia trasparente e replicabile</li>
+              <li>➡️ Supporto operativo e governance framework per team istituzionali</li>
+            </ul>
+            <div className="tag-row">
+              <span className="tag">Solvency mindset</span>
+              <span className="tag">Data integrity</span>
+              <span className="tag">On-chain analytics</span>
+            </div>
           </div>
         </section>
 
-        <section style={{ marginBottom: "3rem" }}>
-          <h2 style={{ color: "#00ffcc", marginBottom: "1rem" }}>Cosa trovi sulla piattaforma</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
+        <section>
+          <SectionHeader
+            kicker="Servizi principali"
+            title="Cosa trovi sulla piattaforma"
+            description="Strumenti, dashboard e consulenza per misurare, pianificare e monitorare il rischio nella finanza decentralizzata."
+          />
+          <div className="section-grid wide">
             {services.map((service) => (
-              <div
-                key={service.title}
-                style={{
-                  background: "#101318",
-                  borderRadius: "16px",
-                  padding: "1.75rem",
-                  border: "1px solid #1f2d36",
-                  boxShadow: "0 18px 35px -28px rgba(0, 255, 204, 0.6)",
-                }}
-              >
-                <h3 style={{ color: "#7fffd4", marginBottom: "0.75rem", fontSize: "1.3rem" }}>
-                  {service.title}
-                </h3>
-                <p style={{ lineHeight: 1.7, marginBottom: "1rem" }}>{service.description}</p>
-                {service.features && (
-                  <ul style={{ 
-                    listStyle: "none", 
-                    padding: 0, 
-                    marginBottom: "1.25rem",
-                    fontSize: "0.85rem",
-                    color: "#a0f0e0"
-                  }}>
-                    {service.features.map((feature, idx) => (
-                      <li key={idx} style={{ marginBottom: "0.25rem" }}>
-                        ✓ {feature}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+              <article key={service.title} className="tile">
+                <div className="tile__icon" aria-hidden>{service.icon}</div>
+                <h3 className="tile__title">{service.title}</h3>
+                <p className="tile__description">{service.description}</p>
+                <ul className="feature-list">
+                  {service.features.map((feature) => (
+                    <li key={feature}>{feature}</li>
+                  ))}
+                </ul>
                 <a className="cta-btn secondary" href={service.link}>
                   {service.cta}
                 </a>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section style={{ marginBottom: "3rem" }}>
-          <h2 style={{ color: "#00ffcc", marginBottom: "1rem" }}>La nostra metodologia</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
+        <section>
+          <SectionHeader
+            kicker="Metodologia"
+            title="Come valutiamo i protocolli"
+            description="Un framework proprietario che integra modelli attuariali, dati on-chain e governance per ottenere una vista olistica del rischio."
+          />
+          <div className="section-grid">
             {methodology.map((item) => (
-              <div
-                key={item.title}
-                style={{
-                  background: "#11161d",
-                  borderRadius: "12px",
-                  padding: "1.5rem",
-                  border: "1px solid #1f2d36",
-                }}
-              >
-                <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{item.icon}</div>
-                <h3 style={{ color: "#7fffd4", marginBottom: "0.5rem" }}>{item.title}</h3>
-                <p style={{ lineHeight: 1.6 }}>{item.detail}</p>
-              </div>
+              <article key={item.title} className="tile tile--subtle">
+                <div className="tile__icon" aria-hidden>{item.icon}</div>
+                <h3 className="tile__title">{item.title}</h3>
+                <p className="tile__description">{item.detail}</p>
+              </article>
             ))}
           </div>
         </section>
 
-        <section style={{ marginBottom: "3rem" }}>
-          <h2 style={{ color: "#00ffcc", marginBottom: "1rem" }}>Per chi lo abbiamo progettato</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
+        <section>
+          <SectionHeader
+            kicker="Stakeholder"
+            title="Per chi lo abbiamo progettato"
+            description="Soluzioni verticali per team che devono prendere decisioni rapide e documentate in contesti ad alto rischio operativo."
+          />
+          <div className="section-grid">
             {useCases.map((item) => (
-              <div
-                key={item.title}
-                style={{
-                  background: "#101318",
-                  borderRadius: "12px",
-                  padding: "1.5rem",
-                  border: "1px solid #1f2d36",
-                }}
-              >
-                <div style={{ fontSize: "2rem", marginBottom: "0.5rem" }}>{item.icon}</div>
-                <h3 style={{ color: "#7fffd4", marginBottom: "0.5rem" }}>{item.title}</h3>
-                <p style={{ lineHeight: 1.6 }}>{item.detail}</p>
-              </div>
+              <article key={item.title} className="tile">
+                <div className="tile__icon" aria-hidden>{item.icon}</div>
+                <h3 className="tile__title">{item.title}</h3>
+                <p className="tile__description">{item.detail}</p>
+              </article>
             ))}
           </div>
         </section>
 
-        <section style={{ marginBottom: "3rem" }}>
-          <h2 style={{ color: "#00ffcc", marginBottom: "1rem" }}>Protocolli in osservazione</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
+        <section>
+          <SectionHeader
+            kicker="Utility live"
+            title="Strumenti basati su dati reali"
+            description="Nuove dashboard che si aggiornano con feed pubblici per offrire una vista sempre aggiornata su rendimento, liquidità e volatilità."
+          />
+          <div className="section-grid">
+            {utilityHighlights.map((item) => (
+              <article key={item.title} className="tile tile--subtle">
+                <h3 className="tile__title">{item.title}</h3>
+                <p className="tile__description">{item.description}</p>
+                <a className="cta-btn secondary" href={item.link}>
+                  Vai allo strumento
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+
+        <section>
+          <SectionHeader
+            kicker="Osservatorio"
+            title="Protocolli in osservazione"
+            description="Schede attuariali aggiornate con metriche di TVL, categoria e principali chain supportate."
+          />
+          <div className="section-grid">
             {featuredProtocols.map((protocol) => (
-              <div
-                key={protocol.slug}
-                style={{
-                  background: "#11161d",
-                  borderRadius: "12px",
-                  padding: "1.5rem",
-                  border: "1px solid #1f2d36",
-                }}
-              >
-                <h3 style={{ color: "#7fffd4", marginBottom: "0.5rem" }}>{protocol.name}</h3>
-                <p style={{ lineHeight: 1.6, marginBottom: "1rem" }}>{protocol.description}</p>
-                <p style={{ fontSize: "0.85rem", color: "#a0f0e0", marginBottom: "1rem" }}>
-                  TVL: {protocol.data.tvl} • Categoria: {protocol.data.category}
+              <article key={protocol.slug} className="tile tile--subtle">
+                <h3 className="tile__title">{protocol.name}</h3>
+                <p className="tile__description">{protocol.description}</p>
+                <p className="tile__description">
+                  TVL indicativo: {protocol.data.tvl} • Categoria: {protocol.data.category}
                 </p>
+                <div className="tag-row">
+                  {protocol.data.blockchains.map((chain) => (
+                    <span key={chain} className="tag">
+                      {chain}
+                    </span>
+                  ))}
+                </div>
                 <a className="cta-btn" href={`/protocols/${protocol.slug}`}>
                   Vedi scheda attuariale
                 </a>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section style={{ marginBottom: "3rem" }}>
-          <h2 style={{ color: "#00ffcc", marginBottom: "1rem" }}>Ultimi approfondimenti</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
-              gap: "1.5rem",
-            }}
-          >
+        <section>
+          <div className="split-panel">
+            <div>
+              <SectionHeader
+                kicker="Onboarding"
+                title="Come iniziare"
+                description="In tre step configuriamo profili di rischio, selezioniamo gli strumenti e impostiamo un monitoraggio continuo."
+              />
+            </div>
+            <div className="timeline">
+              {onboardingSteps.map((step) => (
+                <article key={step.step} className="timeline__card">
+                  <span className="timeline__step">{step.step}</span>
+                  <h3 className="timeline__title">{step.title}</h3>
+                  <p className="tile__description">{step.detail}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        <section>
+          <SectionHeader
+            kicker="Insight"
+            title="Ultimi approfondimenti"
+            description="Approcci pratici per misurare e gestire il rischio attuariale nei protocolli decentralizzati."
+          />
+          <div className="blog-grid">
             {blogHighlights.map((highlight) => (
-              <div
-                key={highlight.title}
-                style={{
-                  background: "#101318",
-                  borderRadius: "12px",
-                  padding: "1.5rem",
-                  border: "1px solid #1f2d36",
-                }}
-              >
-                <h3 style={{ color: "#7fffd4", marginBottom: "0.5rem" }}>{highlight.title}</h3>
-                <p style={{ lineHeight: 1.6, marginBottom: "1rem" }}>{highlight.excerpt}</p>
+              <article key={highlight.title} className="blog-card">
+                <h3 className="blog-card__title">{highlight.title}</h3>
+                <p className="blog-card__excerpt">{highlight.excerpt}</p>
                 <a className="cta-btn secondary" href={highlight.link}>
                   Leggi ora
                 </a>
-              </div>
+              </article>
             ))}
           </div>
         </section>
 
-        <section style={{ marginBottom: "3rem" }}>
-          <h2 style={{ color: "#00ffcc", marginBottom: "1rem" }}>Come iniziare</h2>
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(auto-fit, minmax(220px, 1fr))",
-              gap: "1.25rem",
-            }}
-          >
-            {onboardingSteps.map((step) => (
-              <div
-                key={step.step}
-                style={{
-                  background: "#11161d",
-                  borderRadius: "12px",
-                  padding: "1.5rem",
-                  border: "1px solid #1f2d36",
-                }}
-              >
-                <p style={{ color: "#7fffd4", fontSize: "0.85rem", marginBottom: "0.5rem" }}>{step.step}</p>
-                <h3 style={{ color: "#ffffff", marginBottom: "0.5rem" }}>{step.title}</h3>
-                <p style={{ lineHeight: 1.6 }}>{step.detail}</p>
-              </div>
-            ))}
-          </div>
-        </section>
-
-        <section
-          style={{
-            background: "linear-gradient(135deg, #101318 0%, #1a1f2e 100%)",
-            borderRadius: "16px",
-            padding: "2.5rem",
-            border: "1px solid #1f2d36",
-            boxShadow: "0 20px 40px -20px rgba(0, 255, 204, 0.3)",
-          }}
-        >
-          <div style={{ maxWidth: "700px" }}>
-            <div style={{ fontSize: "2.5rem", marginBottom: "1rem" }}>📬</div>
-            <h2 style={{ color: "#00ffcc", marginBottom: "0.75rem" }}>Ricevi la newsletter attuariale</h2>
-            <p style={{ lineHeight: 1.7, marginBottom: "0.75rem" }}>
-              Un riepilogo mensile con aggiornamenti sui protocolli monitorati, dashboard di rischio e strumenti che stiamo
-              sviluppando. Nessuno spam, solo insight azionabili per professionisti della finanza decentralizzata.
-            </p>
-            <ul style={{ 
-              listStyle: "none", 
-              padding: 0, 
-              marginBottom: "1.5rem",
-              fontSize: "0.9rem",
-              color: "#a0f0e0"
-            }}>
-              <li style={{ marginBottom: "0.5rem" }}>✓ Analisi mensili di mercato e volatilità</li>
-              <li style={{ marginBottom: "0.5rem" }}>✓ Nuovi protocolli e pool ad alto rendimento risk-adjusted</li>
-              <li style={{ marginBottom: "0.5rem" }}>✓ Alert su eventi critici (exploit, governance, liquidazioni)</li>
-              <li style={{ marginBottom: "0.5rem" }}>✓ Accesso anticipato a nuovi strumenti e calcolatori</li>
-            </ul>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: "0.75rem" }}>
-              <a className="cta-btn" href="mailto:ricerche@crypto-attuario.com">
-                Iscriviti ora
-              </a>
-              <a className="cta-btn secondary" href="/blog">
-                Leggi gli articoli
-              </a>
-            </div>
+        <section className="newsletter-panel">
+          <div style={{ fontSize: "2.5rem" }}>📬</div>
+          <h2 className="section-header__title">Ricevi la newsletter attuariale</h2>
+          <p className="section-header__description">
+            Un riepilogo mensile con aggiornamenti sui protocolli monitorati, dashboard di rischio e strumenti che stiamo
+            sviluppando. Nessuno spam, solo insight azionabili per professionisti della finanza decentralizzata.
+          </p>
+          <ul className="split-panel__list">
+            <li>✓ Analisi mensili di mercato e volatilità</li>
+            <li>✓ Nuovi protocolli e pool ad alto rendimento risk-adjusted</li>
+            <li>✓ Alert su eventi critici (exploit, governance, liquidazioni)</li>
+            <li>✓ Accesso anticipato a nuovi strumenti e calcolatori</li>
+          </ul>
+          <div className="hero__actions">
+            <a className="cta-btn" href="mailto:ricerche@crypto-attuario.com">
+              Iscriviti ora
+            </a>
+            <a className="cta-btn secondary" href="/blog">
+              Leggi gli articoli
+            </a>
           </div>
         </section>
       </div>
