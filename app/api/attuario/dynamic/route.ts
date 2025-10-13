@@ -10,7 +10,8 @@ export async function GET(req: NextRequest) {
   const limit = Math.max(1, Math.min(500, Number(sp.get('limit') ?? 50)));
 
   const pools = await getPools();
-  if (!pools?.length) return NextResponse.json({ error: 'No pool data' }, { status: 503 });
+  if (!pools?.length)
+    return NextResponse.json({ error: 'Nessun dato disponibile per le pool' }, { status: 503 });
 
   const ranked = rankPools(normalizePools(pools), rf, minTVL);
   const limited = ranked.slice(0, limit);

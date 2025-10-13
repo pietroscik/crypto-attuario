@@ -30,10 +30,30 @@ interface ApiResponse {
   timestamp: string;
 }
 
+const MIN_VOL_PROXY = 0.01;
+const SNAPSHOT_ENDPOINT = '/api/attuario';
+const DYNAMIC_ENDPOINT = '/api/attuario/dynamic';
+const SNAPSHOT_DEFAULTS = { rf: 0, minTVL: 1_000_000, limit: 50 } as const;
+
 const fetcher = async (url: string) => {
   const res = await fetch(url);
   if (!res.ok) {
-    throw new Error('Richiesta snapshot non riuscita');
+    let errorMessage = 'Richiesta snapshot non riuscita';
+    switch (res.status) {
+      case 404:
+        errorMessage = 'Risorsa non trovata (404)';
+        break;
+      case 500:
+        errorMessage = 'Errore interno del server (500)';
+        break;
+      case 503:
+        errorMessage = 'Servizio non disponibile (503)';
+        break;
+      default:
+        errorMessage = `Errore HTTP ${res.status}`;
+    }
+    const statusText = res.statusText?.trim();
+    throw new Error(statusText ? `${errorMessage}: ${statusText}` : errorMessage);
   }
   return res.json();
 };
@@ -45,40 +65,83 @@ export default function AttuarioRanking() {
   const [sortField, setSortField] = useState<keyof RankedPool>('riskAdjustedMetric');
   const [sortDirection, setSortDirection] = useState<'asc' | 'desc'>('desc');
 
-  const { data: snapshot, error, isLoading } = useSWR<ApiResponse>(
-    '/api/attuario',
-    fetcher,
-    {
-      revalidateOnFocus: false,
-    }
-  );
+  const {
+    data: snapshot,
+    error: snapshotError,
+    isLoading: isSnapshotLoading,
+  } = useSWR<ApiResponse>(SNAPSHOT_ENDPOINT, fetcher, {
+    revalidateOnFocus: false,
+  });
+
+  const hasCustomParams =
+    rf !== SNAPSHOT_DEFAULTS.rf ||
+    minTVL !== SNAPSHOT_DEFAULTS.minTVL ||
+    limit !== SNAPSHOT_DEFAULTS.limit;
+
+  const dynamicKey = hasCustomParams
+    ? `${DYNAMIC_ENDPOINT}?${new URLSearchParams({
+        rf: rf.toString(),
+        minTVL: minTVL.toString(),
+        limit: limit.toString(),
+      }).toString()}`
+    : null;
+
+  const {
+    data: dynamicData,
+    error: dynamicError,
+    isLoading: isDynamicLoading,
+  } = useSWR<ApiResponse>(dynamicKey, fetcher, {
+    revalidateOnFocus: false,
+    keepPreviousData: true,
+    fallbackData: snapshot,
+  });
+
+  const rankingData = hasCustomParams ? dynamicData ?? snapshot : snapshot;
+  const error = dynamicError ?? snapshotError;
+  const isLoading = hasCustomParams
+    ? isDynamicLoading && !dynamicData
+    : isSnapshotLoading && !snapshot;
 
   const { filteredPools, filteredTotal } = useMemo(() => {
-    if (!snapshot?.data) {
+    if (!rankingData?.data) {
       return { filteredPools: [] as RankedPool[], filteredTotal: 0 };
     }
 
-    const poolsWithAdjustments = snapshot.data
+    const poolsWithAdjustments = rankingData.data
       .map((pool) => {
-        const safeVolProxy = pool.volProxy > 0 ? pool.volProxy : 0.01;
+        const safeVolProxy = Math.max(pool.volProxy || 0, MIN_VOL_PROXY);
         const adjustedMetric = (pool.apy - rf) / safeVolProxy;
 
         return {
           ...pool,
+          volProxy: safeVolProxy,
           riskAdjustedMetric: adjustedMetric,
         };
       })
       .filter((pool) => pool.tvlUsd >= minTVL);
 
-    const sortedByRisk = [...poolsWithAdjustments].sort(
-      (a, b) => b.riskAdjustedMetric - a.riskAdjustedMetric
-    );
+    const sortedPools = [...poolsWithAdjustments].sort((a, b) => {
+      const aValue = a[sortField];
+      const bValue = b[sortField];
+
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return sortDirection === 'asc' ? aValue - bValue : bValue - aValue;
+      }
+
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return sortDirection === 'asc'
+          ? aValue.localeCompare(bValue)
+          : bValue.localeCompare(aValue);
+      }
+
+      return 0;
+    });
 
     return {
-      filteredPools: sortedByRisk.slice(0, limit),
+      filteredPools: sortedPools.slice(0, limit),
       filteredTotal: poolsWithAdjustments.length,
     };
-  }, [snapshot, rf, minTVL, limit]);
+  }, [rankingData, rf, minTVL, limit, sortField, sortDirection]);
 
   const handleSort = (field: keyof RankedPool) => {
     if (sortField === field) {
@@ -87,29 +150,6 @@ export default function AttuarioRanking() {
       setSortField(field);
       setSortDirection('desc');
     }
-  };
-
-  const getSortedData = () => {
-    if (!filteredPools.length) return [];
-
-    const sorted = [...filteredPools].sort((a, b) => {
-      const aVal = a[sortField];
-      const bVal = b[sortField];
-      
-      if (typeof aVal === 'number' && typeof bVal === 'number') {
-        return sortDirection === 'asc' ? aVal - bVal : bVal - aVal;
-      }
-      
-      if (typeof aVal === 'string' && typeof bVal === 'string') {
-        return sortDirection === 'asc' 
-          ? aVal.localeCompare(bVal)
-          : bVal.localeCompare(aVal);
-      }
-      
-      return 0;
-    });
-    
-    return sorted;
   };
 
   const formatNumber = (num: number, decimals: number = 2) => {
@@ -394,7 +434,7 @@ export default function AttuarioRanking() {
                   </tr>
                 </thead>
                 <tbody>
-                  {getSortedData().map((pool, idx) => (
+                  {filteredPools.map((pool, idx) => (
                     <tr
                       key={`${pool.project}-${pool.chain}-${pool.symbol}-${idx}`}
                       style={{
@@ -489,7 +529,8 @@ export default function AttuarioRanking() {
           <p style={{ marginBottom: '0.5rem', lineHeight: 1.6 }}>
             <strong>Volatilità Proxy:</strong> Calcolata come |APY - APY_7d|.
             Se non disponibile, viene usato un valore di default (0.05).
-            Un minimo di 0.01 è applicato per evitare divisioni per valori prossimi allo zero.
+            Un minimo di {MIN_VOL_PROXY.toFixed(2)} è applicato (costante <code>MIN_VOL_PROXY</code>)
+            per evitare divisioni per valori prossimi allo zero.
           </p>
           <p style={{ lineHeight: 1.6 }}>
             <strong>Fonte dati:</strong> <a
