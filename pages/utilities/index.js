@@ -16,6 +16,20 @@ export default function UtilitiesHub() {
       features: ['Sharpe Ratio', 'Sortino Ratio', 'Max Drawdown', 'Backtest 3+ anni'],
     },
     {
+      title: 'Efficient Frontier',
+      description: 'Visualizza la frontiera efficiente e confronta strategie di portfolio con scatter chart interattivo. Export CSV disponibile.',
+      link: '/utilities/frontier',
+      icon: '📈',
+      features: ['1k-2k portfolio samples', 'EW/RP/MaxSharpe highlights', 'CSV export', 'Shrinkage tuning'],
+    },
+    {
+      title: 'Yield Screener',
+      description: 'Esplora opportunità di yield DeFi da DeFiLlama. Filtra per chain, TVL e age. Solo informativo - DYOR sempre.',
+      link: '/utilities/yields',
+      icon: '💰',
+      features: ['Multi-chain yields', 'TVL & APY filters', 'Impermanent Loss info', 'Educational only'],
+    },
+    {
       title: 'Arbitrage Scanner',
       description: 'Scanner simulato di opportunità di arbitraggio tra exchange. Considera fee, slippage e calcola spread netti. Solo a scopo educativo.',
       link: '/utilities/arbitrage',

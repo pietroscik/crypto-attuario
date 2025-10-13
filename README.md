@@ -43,19 +43,58 @@ Comprehensive portfolio analytics with multiple optimization strategies:
 
 **Features:**
 - **3 Optimization Strategies:** Equal Weight, Risk Parity, Max Sharpe Ratio
+- **Web Worker Optimization:** Heavy calculations offloaded to background threads for responsive UI
+- **Covariance Shrinkage:** Ledoit-Wolf style shrinkage (α 0-0.30, default 0.10) for improved stability
+- **Configurable Annualization:** 252 (traditional) or 365 (crypto 24/7) trading days
 - **Risk Metrics:** Sharpe, Sortino, Calmar, Volatility, Max Drawdown, VaR, Expected Shortfall
 - **Backtesting:** Walk-forward backtesting with monthly rebalancing
 - **Asset Selection:** Choose 2-10 crypto assets from popular options
-- **Customizable Horizon:** Analyze portfolios over 30-365 days
+- **Customizable Horizon:** Analyze portfolios over 30-730 days
+- **Persistence:** Configurations saved to localStorage
+- **URL Sharing:** Generate shareable links with all parameters
 - **Export-ready:** All weights and metrics calculated client-side
 
 **Technical Details:**
 - Pure JavaScript implementations (no heavy dependencies)
-- Grid/random search optimization on simplex for max Sharpe
+- Grid/random search optimization on simplex for max Sharpe (2000 samples)
 - Iterative coordinate descent for Risk Parity
 - Returns calculations: arithmetic and log returns
-- Covariance matrix estimation from historical data
-- Annualization: 252 trading periods per year
+- Covariance matrix estimation with optional shrinkage
+- Web Workers for non-blocking optimization
+
+#### Efficient Frontier (`/utilities/frontier`)
+
+Visualize the risk-return tradeoff across portfolio space:
+
+**Features:**
+- **Synthetic Frontier:** 1000-2000 sampled portfolios on simplex
+- **Interactive Scatter Chart:** Built with Recharts
+- **Notable Portfolios:** Equal Weight, Risk Parity, Max Sharpe highlighted with distinct markers
+- **CSV Export:** Download full frontier data with weights
+- **Shrinkage Control:** Adjust covariance shrinkage in real-time
+- **Deterministic Seeding:** Reproducible results for testing
+
+**Technical Details:**
+- Random simplex sampling with weight bounds [0,1]
+- Portfolio risk: sqrt(w' Σ w)
+- Portfolio return: w' μ
+- Sharpe ratio: (return - rf) / risk
+
+#### Yield Screener (`/utilities/yields`)
+
+Explore DeFi yield opportunities from DeFiLlama:
+
+**Features:**
+- **Multi-chain Yields:** View APY across all major chains
+- **Filters:** Chain, minimum TVL, minimum age
+- **Risk Indicators:** Impermanent loss warnings
+- **Caching:** 60-second TTL for efficient data fetching
+- **Top 100 Display:** Performance-optimized rendering
+- **Educational Disclaimers:** Clear warnings about risks
+
+**Data Source:** DeFiLlama Yields API
+
+**Disclaimer:** APY values are indicative and highly volatile. DeFi carries smart contract risk, impermanent loss, and other risks. Educational purposes only.
 
 #### Arbitrage Scanner (`/utilities/arbitrage`)
 
@@ -80,6 +119,37 @@ Scans for arbitrage opportunities between simulated exchange venues.
 **Fee Models:**
 - Conservative: 0.4% taker, 0.1% withdrawal
 - Optimistic: 0.2% taker, 0.05% withdrawal
+
+#### Methodology (`/utilities/methodology`)
+
+Comprehensive documentation of all formulas, assumptions, and limitations:
+
+**Sections:**
+- Returns and Annualization (arithmetic, log, compounding)
+- Risk Metrics (volatility, MDD, VaR, ES)
+- Risk-Adjusted Performance (Sharpe, Sortino, Calmar)
+- Portfolio Optimization (EW, RP, MaxSharpe, shrinkage)
+- Backtesting methodology
+- Important limitations and best practices
+- References to academic literature
+
+### 🌐 Network Monitoring
+
+**Network HUD:** Real-time status indicator showing:
+- Cached requests (data from cache)
+- Live requests (fresh API calls)
+- Retry attempts (with exponential backoff)
+- Error states
+
+**Rate Limiting:**
+- Minimum 500ms between requests to same hostname
+- Prevents API throttling and ensures fair usage
+
+**Resilience Features:**
+- Automatic retry with exponential backoff (1s, 2s, 4s)
+- Request timeout: 10 seconds
+- Cache with configurable TTL (default 60s)
+- localStorage persistence for client-side caching
 
 ### 🏥 Health & Monitoring
 

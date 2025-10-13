@@ -3,14 +3,14 @@
  * Portfolio optimization, backtesting, and risk metrics
  */
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Layout from '../../components/Layout';
 import KpiCard from '../../components/KpiCard';
 import { formatNumber, formatPercent } from '../../lib/helpers/format';
 import { fetchMarketChart } from '../../lib/data/coingecko';
 import { toPctReturns } from '../../lib/metrics/returns';
 import { calculateMetrics } from '../../lib/metrics/performance';
-import { equalWeight, riskParity, maxSharpe, calculateCovarianceMatrix } from '../../lib/portfolio/weights';
+import { equalWeight, riskParity, maxSharpe, calculateCovarianceMatrix, shrinkCov } from '../../lib/portfolio/weights';
 import { walkForward, pricesToReturnsMatrix } from '../../lib/portfolio/backtest';
 
 // Popular crypto assets for selection
@@ -30,10 +30,129 @@ const AVAILABLE_ASSETS = [
 export default function PortfolioUtilities() {
   const [selectedAssets, setSelectedAssets] = useState(['bitcoin', 'ethereum', 'binancecoin']);
   const [horizon, setHorizon] = useState(90);
+  const [shrinkage, setShrinkage] = useState(0.10);
+  const [tradingDays, setTradingDays] = useState(365);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [portfolios, setPortfolios] = useState(null);
   const [activeTab, setActiveTab] = useState('overview');
+  const workerRef = useRef(null);
+
+  // Load from localStorage on mount
+  useEffect(() => {
+    loadFromStorage();
+    loadFromURL();
+  }, []);
+
+  // Load configuration from localStorage
+  const loadFromStorage = () => {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const saved = localStorage.getItem('portfolio-config');
+      if (saved) {
+        const config = JSON.parse(saved);
+        if (config.selectedAssets) setSelectedAssets(config.selectedAssets);
+        if (config.horizon) setHorizon(config.horizon);
+        if (config.shrinkage !== undefined) setShrinkage(config.shrinkage);
+        if (config.tradingDays) setTradingDays(config.tradingDays);
+      }
+    } catch (err) {
+      console.warn('Failed to load config from localStorage:', err);
+    }
+  };
+
+  // Load configuration from URL parameters
+  const loadFromURL = () => {
+    if (typeof window === 'undefined') return;
+    
+    const params = new URLSearchParams(window.location.search);
+    
+    if (params.has('assets')) {
+      const assets = params.get('assets').split(',').filter(a => 
+        AVAILABLE_ASSETS.some(av => av.id === a)
+      );
+      if (assets.length >= 2) setSelectedAssets(assets);
+    }
+    if (params.has('h')) setHorizon(Number(params.get('h')));
+    if (params.has('alpha')) setShrinkage(Number(params.get('alpha')));
+    if (params.has('days')) setTradingDays(Number(params.get('days')));
+  };
+
+  // Save configuration to localStorage
+  const saveToStorage = () => {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const config = {
+        selectedAssets,
+        horizon,
+        shrinkage,
+        tradingDays,
+      };
+      localStorage.setItem('portfolio-config', JSON.stringify(config));
+    } catch (err) {
+      console.warn('Failed to save config to localStorage:', err);
+    }
+  };
+
+  // Generate shareable URL
+  const generateShareURL = () => {
+    if (typeof window === 'undefined') return '';
+    
+    const params = new URLSearchParams();
+    params.set('assets', selectedAssets.join(','));
+    params.set('h', horizon.toString());
+    params.set('alpha', shrinkage.toFixed(2));
+    params.set('days', tradingDays.toString());
+    
+    return `${window.location.origin}${window.location.pathname}?${params.toString()}`;
+  };
+
+  // Copy share link to clipboard
+  const copyShareLink = async () => {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      const url = generateShareURL();
+      await navigator.clipboard.writeText(url);
+      alert('Share link copied to clipboard!');
+    } catch (err) {
+      console.error('Failed to copy link:', err);
+      alert('Failed to copy link');
+    }
+  };
+
+  // Reset to defaults
+  const resetConfig = () => {
+    setSelectedAssets(['bitcoin', 'ethereum', 'binancecoin']);
+    setHorizon(90);
+    setShrinkage(0.10);
+    setTradingDays(365);
+    setPortfolios(null);
+    
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('portfolio-config');
+      window.history.pushState({}, '', window.location.pathname);
+    }
+  };
+
+  // Initialize worker
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    
+    try {
+      workerRef.current = new Worker('/workers/optimizer.worker.js');
+    } catch (err) {
+      console.warn('Web Worker not available, will use fallback:', err);
+    }
+
+    return () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+      }
+    };
+  }, []);
 
   const toggleAsset = (assetId) => {
     if (selectedAssets.includes(assetId)) {
@@ -72,19 +191,70 @@ export default function PortfolioUtilities() {
       // Calculate returns
       const returnsMatrix = pricesToReturnsMatrix(priceData);
       
-      // Calculate covariance matrix
-      const covMatrix = calculateCovarianceMatrix(returnsMatrix);
+      // Calculate and shrink covariance matrix
+      let covMatrix = calculateCovarianceMatrix(returnsMatrix);
+      covMatrix = shrinkCov(covMatrix, shrinkage);
 
       // Calculate expected returns (simple historical mean, annualized)
       const expReturns = returnsMatrix.map(rets => {
         const mean = rets.reduce((sum, r) => sum + r, 0) / rets.length;
-        return Math.pow(1 + mean, 252) - 1; // Annualize
+        return Math.pow(1 + mean, tradingDays) - 1; // Annualize with configurable trading days
       });
 
       // Calculate three portfolio strategies
-      const equalWeights = equalWeight(assetNames.length);
-      const riskParityWeights = riskParity(covMatrix);
-      const maxSharpeWeights = maxSharpe(expReturns, covMatrix, 0, [0, 1], 2000);
+      let equalWeights, riskParityWeights, maxSharpeWeights;
+
+      // Try using Web Worker for expensive calculations
+      const useWorker = workerRef.current !== null;
+
+      if (useWorker) {
+        // Use worker for optimizations with timeout and cleanup
+        const createWorkerPromise = (type, data, timeoutMs = 5000) => {
+          return new Promise((resolve, reject) => {
+            const timeout = setTimeout(() => {
+              workerRef.current?.terminate();
+              reject(new Error(`Worker timeout: ${type}`));
+            }, timeoutMs);
+            
+            const handleMessage = (e) => {
+              if (e.data.type === type) {
+                clearTimeout(timeout);
+                workerRef.current?.removeEventListener('message', handleMessage);
+                if (e.data.success) {
+                  resolve(e.data.result);
+                } else {
+                  reject(new Error(e.data.error || 'Worker error'));
+                }
+              }
+            };
+            
+            workerRef.current?.addEventListener('message', handleMessage);
+            workerRef.current?.postMessage({ type, data });
+          });
+        };
+
+        try {
+          const [rpWeights, msWeights] = await Promise.all([
+            createWorkerPromise('riskParity', { cov: covMatrix }),
+            createWorkerPromise('maxSharpe', { expRet: expReturns, cov: covMatrix, rf: 0, bounds: [0, 1], numSamples: 2000 })
+          ]);
+
+          equalWeights = equalWeight(assetNames.length);
+          riskParityWeights = rpWeights;
+          maxSharpeWeights = msWeights;
+        } catch (workerError) {
+          // Fallback to synchronous if worker fails
+          console.warn('Worker failed, using fallback:', workerError);
+          equalWeights = equalWeight(assetNames.length);
+          riskParityWeights = riskParity(covMatrix);
+          maxSharpeWeights = maxSharpe(expReturns, covMatrix, 0, [0, 1], 2000);
+        }
+      } else {
+        // Fallback to synchronous calculation
+        equalWeights = equalWeight(assetNames.length);
+        riskParityWeights = riskParity(covMatrix);
+        maxSharpeWeights = maxSharpe(expReturns, covMatrix, 0, [0, 1], 2000);
+      }
 
       // Backtest each portfolio
       const strategyEqual = () => equalWeights;
@@ -95,10 +265,10 @@ export default function PortfolioUtilities() {
       const btRP = walkForward(priceData, 'monthly', strategyRP);
       const btMS = walkForward(priceData, 'monthly', strategyMS);
 
-      // Calculate metrics
-      const metricsEqual = calculateMetrics(btEqual.returns, 0, 252);
-      const metricsRP = calculateMetrics(btRP.returns, 0, 252);
-      const metricsMS = calculateMetrics(btMS.returns, 0, 252);
+      // Calculate metrics with configurable trading days
+      const metricsEqual = calculateMetrics(btEqual.returns, 0, tradingDays);
+      const metricsRP = calculateMetrics(btRP.returns, 0, tradingDays);
+      const metricsMS = calculateMetrics(btMS.returns, 0, tradingDays);
 
       setPortfolios({
         assets: assetNames.map((name, i) => ({
@@ -114,6 +284,9 @@ export default function PortfolioUtilities() {
         riskParity: { ...metricsRP, backtest: btRP },
         maxSharpe: { ...metricsMS, backtest: btMS },
       });
+
+      // Save configuration
+      saveToStorage();
 
     } catch (err) {
       console.error('Portfolio calculation error:', err);
@@ -193,13 +366,110 @@ export default function PortfolioUtilities() {
             <input
               type="range"
               min="30"
-              max="365"
+              max="730"
               step="30"
               value={horizon}
               onChange={(e) => setHorizon(Number(e.target.value))}
-              style={{ width: '100%', maxWidth: '400px' }}
+              style={{ width: '100%' }}
             />
           </div>
+
+          {/* New: Shrinkage and Trading Days */}
+          <div style={{ marginTop: '1.5rem', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', color: '#c0c0c0' }}>
+                Covariance Shrinkage α: <strong>{shrinkage.toFixed(2)}</strong>
+                <span style={{ fontSize: '0.8rem', color: '#888', marginLeft: '0.5rem' }}>
+                  (improves stability)
+                </span>
+              </label>
+              <input
+                type="range"
+                min="0"
+                max="0.30"
+                step="0.01"
+                value={Math.max(0, Math.min(0.30, shrinkage))}
+                onChange={(e) => setShrinkage(Math.max(0, Math.min(0.30, Number(e.target.value))))}
+                style={{ width: '100%' }}
+              />
+            </div>
+
+            <div>
+              <label style={{ display: 'block', marginBottom: '0.5rem', color: '#c0c0c0' }}>
+                Annualization (trading days/year)
+              </label>
+              <select
+                value={tradingDays}
+                onChange={(e) => setTradingDays(Number(e.target.value))}
+                style={{
+                  width: '100%',
+                  padding: '0.5rem',
+                  background: '#0d1117',
+                  border: '1px solid #30363d',
+                  borderRadius: '4px',
+                  color: '#c0c0c0',
+                }}
+              >
+                <option value={252}>252 (Traditional markets)</option>
+                <option value={365}>365 (Crypto 24/7)</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Action buttons */}
+          <div style={{ marginTop: '1.5rem', display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
+            <button
+              onClick={calculatePortfolios}
+              disabled={loading || selectedAssets.length < 2}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: loading ? '#555' : '#00ffcc',
+                color: loading ? '#999' : '#0d1117',
+                border: 'none',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor: loading || selectedAssets.length < 2 ? 'not-allowed' : 'pointer',
+              }}
+            >
+              {loading ? 'Computing...' : 'Calcola Portafogli'}
+            </button>
+
+            <button
+              onClick={copyShareLink}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: '#1f2d36',
+                color: '#00ffcc',
+                border: '1px solid #00ffcc',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+              }}
+            >
+              📋 Copy Share Link
+            </button>
+
+            <button
+              onClick={resetConfig}
+              style={{
+                padding: '0.75rem 1.5rem',
+                background: '#1f2d36',
+                color: '#ff6b6b',
+                border: '1px solid #ff6b6b',
+                borderRadius: '6px',
+                fontWeight: 'bold',
+                cursor: 'pointer',
+              }}
+            >
+              🔄 Reset
+            </button>
+          </div>
+
+          {selectedAssets.length < 2 && (
+            <div style={{ marginTop: '1rem', padding: '0.75rem', background: '#1a1a2e', borderRadius: '6px', color: '#ffcccb' }}>
+              ⚠️ Select at least 2 assets to start
+            </div>
+          )}
         </section>
 
         {/* Error Display */}
