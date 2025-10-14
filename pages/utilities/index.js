@@ -36,6 +36,13 @@ export default function UtilitiesHub() {
       icon: '🔄',
       features: ['Scan multi-venue', 'Modellazione fee', 'Simulazione P&L', 'Solo educativo'],
     },
+    {
+      title: 'Methodology & Assunzioni',
+      description: 'Documentazione completa di formule, ipotesi e limiti dei modelli utilizzati nei nostri tool quantitativi.',
+      link: '/utilities/methodology',
+      icon: '📚',
+      features: ['Formula book', 'Metriche di rischio', 'Assunzioni su dati', 'Avvertenze d’uso'],
+    },
   ];
 
   return (

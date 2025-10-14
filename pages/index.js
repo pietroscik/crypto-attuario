@@ -272,6 +272,11 @@ function Home() {
               </div>
             ))}
           </div>
+          <div style={{ marginTop: "1.5rem", textAlign: "center" }}>
+            <a className="cta-btn" href="/utilities/methodology">
+              Esplora la documentazione completa
+            </a>
+          </div>
         </section>
 
         <section style={{ marginBottom: "3rem" }}>

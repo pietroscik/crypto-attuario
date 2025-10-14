@@ -22,6 +22,7 @@ export default function Layout({ children }) {
           <a href="/">Home</a>
           <a href="/blog">Blog</a>
           <a href="/utilities">Utilities</a>
+          <a href="/utilities/methodology">Metodologia</a>
           <a href="/staking">Staking</a>
           <a href="/rendita">Rendita</a>
           <a href="/var">VaR</a>

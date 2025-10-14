@@ -137,18 +137,23 @@ export default function Methodology() {
               Value at Risk (VaR)
             </h3>
             <p style={{ marginBottom: '1rem' }}>
-              Historical VaR at confidence level α (typically 95% or 99%):
+              Calcoliamo sia il VaR parametrico (assunzione di distribuzione normale) sia quello storico:
             </p>
-            <code style={{ 
-              display: 'block', 
-              background: '#11161d', 
-              padding: '1rem', 
+            <code style={{
+              display: 'block',
+              background: '#11161d',
+              padding: '1rem',
               borderRadius: '8px',
               marginBottom: '1rem',
               fontFamily: 'monospace'
             }}>
-              VaR_α = -percentile(returns, 1-α)
+              Parametrico: VaR_α = μ - z_α × σ
+              <br />
+              Storico: VaR_α = percentile(returns, 1-α)
             </code>
+            <p>
+              α tipici: 95% o 99%. Il VaR è espresso come perdita attesa minima (valore negativo) sul periodo di una barra.
+            </p>
 
             <h3 style={{ color: '#7fffd4', fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>
               Expected Shortfall (ES / CVaR)
@@ -217,16 +222,36 @@ export default function Methodology() {
             <p style={{ marginBottom: '1rem' }}>
               Return relative to maximum drawdown:
             </p>
-            <code style={{ 
-              display: 'block', 
-              background: '#11161d', 
-              padding: '1rem', 
+            <code style={{
+              display: 'block',
+              background: '#11161d',
+              padding: '1rem',
               borderRadius: '8px',
               marginBottom: '1rem',
               fontFamily: 'monospace'
             }}>
               Calmar = Annual_Return / |MDD|
             </code>
+
+            <h3 style={{ color: '#7fffd4', fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>
+              Information Ratio
+            </h3>
+            <p style={{ marginBottom: '1rem' }}>
+              Misura l'extra-rendimento rispetto a un benchmark, normalizzato per l'errore di tracking:
+            </p>
+            <code style={{
+              display: 'block',
+              background: '#11161d',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+              fontFamily: 'monospace'
+            }}>
+              IR = (R_p - R_b) / σ_tracking
+            </code>
+            <p>
+              Dove R_b è il rendimento del benchmark e σ_tracking è la volatilità dei rendimenti in eccesso. Annualizziamo il differenziale prima di dividerlo per il tracking error.
+            </p>
           </section>
 
           {/* Portfolio Optimization */}
@@ -258,10 +283,10 @@ export default function Methodology() {
             <p style={{ marginBottom: '1rem' }}>
               Equalizes risk contribution from each asset. Solved iteratively:
             </p>
-            <code style={{ 
-              display: 'block', 
-              background: '#11161d', 
-              padding: '1rem', 
+            <code style={{
+              display: 'block',
+              background: '#11161d',
+              padding: '1rem',
               borderRadius: '8px',
               marginBottom: '1rem',
               fontFamily: 'monospace'
@@ -272,15 +297,35 @@ export default function Methodology() {
             </code>
 
             <h3 style={{ color: '#7fffd4', fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>
+              Minimum Variance
+            </h3>
+            <p style={{ marginBottom: '1rem' }}>
+              Ricerca il portafoglio con varianza minima soggetto a pesi long-only (0 ≤ w_i ≤ 1, Σ w_i = 1):
+            </p>
+            <code style={{
+              display: 'block',
+              background: '#11161d',
+              padding: '1rem',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+              fontFamily: 'monospace'
+            }}>
+              min Σ_i Σ_j w_i w_j Cov_ij
+            </code>
+            <p>
+              Usiamo campionamento casuale sul simplesso (fino a 1000 combinazioni) e soluzione chiusa per 2 asset. Risultato normalizzato per rispettare i vincoli.
+            </p>
+
+            <h3 style={{ color: '#7fffd4', fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>
               Maximum Sharpe Ratio
             </h3>
             <p style={{ marginBottom: '1rem' }}>
               Optimizes risk-adjusted returns using random simplex search (2000 samples):
             </p>
-            <code style={{ 
-              display: 'block', 
-              background: '#11161d', 
-              padding: '1rem', 
+            <code style={{
+              display: 'block',
+              background: '#11161d',
+              padding: '1rem',
               borderRadius: '8px',
               marginBottom: '1rem',
               fontFamily: 'monospace'
@@ -289,6 +334,9 @@ export default function Methodology() {
               <br />
               subject to: Σw_i = 1, 0 ≤ w_i ≤ 1
             </code>
+            <p>
+              Le aspettative di rendimento μ sono stimate come media storica annualizzata (configurabile tra 252 o 365 giorni di trading).
+            </p>
 
             <h3 style={{ color: '#7fffd4', fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>
               Covariance Shrinkage
@@ -310,6 +358,37 @@ export default function Methodology() {
             </code>
             <p>
               Default α = 0.10, adjustable via slider (0 to 0.30).
+            </p>
+          </section>
+
+          {/* Market Intelligence Tools */}
+          <section style={{ marginBottom: '3rem' }}>
+            <h2 style={{ color: '#00ffcc', fontSize: '1.5rem', marginBottom: '1rem' }}>
+              Market & Yield Scanners
+            </h2>
+
+            <h3 style={{ color: '#7fffd4', fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>
+              Arbitrage Scanner (Simulato)
+            </h3>
+            <p style={{ marginBottom: '1rem' }}>
+              Lo scanner genera quotazioni sintetiche per venue centralizzati, applica modelli di fee configurabili e calcola spread lordi/netti:
+            </p>
+            <ul style={{ marginLeft: '2rem', lineHeight: 1.8, marginBottom: '1rem' }}>
+              <li>Fee model <em>conservative</em>: taker 0.4%, maker 0.2%, withdrawal 0.1%</li>
+              <li>Fee model <em>optimistic</em>: taker 0.2%, maker 0.1%, withdrawal 0.05%</li>
+              <li>Net spread = spread lordo − (2 × taker + withdrawal)</li>
+              <li>Dimensione trade limitata da liquidità simulata e parametro <code>maxSize</code></li>
+              <li>Modello di slippage lineare: prezzo = base × (1 + min(size/liquidity, 5%))</li>
+            </ul>
+            <p>
+              Tutte le opportunità sono marcate come <strong>SIMULATED</strong>. Nessuna esecuzione reale: serve solo per studiare la sensibilità al costo delle fee e agli spread.
+            </p>
+
+            <h3 style={{ color: '#7fffd4', fontSize: '1.2rem', marginTop: '1.5rem', marginBottom: '0.75rem' }}>
+              Yield Screener
+            </h3>
+            <p style={{ marginBottom: '1rem' }}>
+              I dati provengono da DeFiLlama (API pubblica). Filtri supportati: chain, TVL minimo, APY minimo e età del pool. Nessun rendimento è garantito: evidenziamo sempre il rischio di impermanent loss e la natura puramente informativa dello strumento.
             </p>
           </section>
 
