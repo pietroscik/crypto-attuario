@@ -53,7 +53,7 @@ describe('Risk Module', () => {
     it('should calculate annualized volatility', () => {
       const returns = [0.01, -0.01, 0.02, -0.015, 0.005];
       const vol = volatility(returns, 252);
-      
+
       expect(vol).toBeGreaterThan(0);
       expect(vol).toBeLessThan(1); // Should be reasonable
     });
@@ -61,6 +61,14 @@ describe('Risk Module', () => {
     it('should return 0 for insufficient data', () => {
       expect(volatility([], 252)).toBe(0);
       expect(volatility([0.01], 252)).toBe(0);
+    });
+
+    it('should ignore non-finite values', () => {
+      const returns = [0.01, NaN, 0.02, undefined, 0.015, Infinity, -0.005];
+      const vol = volatility(returns, 252);
+
+      expect(vol).toBeGreaterThan(0);
+      expect(Number.isFinite(vol)).toBe(true);
     });
   });
 
@@ -83,28 +91,37 @@ describe('Risk Module', () => {
 
   describe('VaR', () => {
     it('should calculate parametric VaR', () => {
-      const returns = Array(100).fill(0).map((_, i) => (Math.random() - 0.5) * 0.02);
+      const returns = [-0.02, -0.015, -0.005, 0.01, 0.02, 0.03];
       const var95 = VaR(returns, 0.95, 'parametric');
-      
-      expect(var95).toBeLessThan(0); // VaR is negative
-      expect(Math.abs(var95)).toBeLessThan(0.1); // Should be reasonable
+
+      expect(var95).toBeLessThan(0);
+      expect(var95).toBeCloseTo(-0.0294, 4);
     });
 
     it('should calculate historical VaR', () => {
-      const returns = [-0.05, -0.03, -0.01, 0.01, 0.02, 0.03];
+      const returns = [-0.02, -0.015, -0.005, 0.01, 0.02, 0.03];
       const var95 = VaR(returns, 0.95, 'historical');
-      
+
       expect(var95).toBeLessThan(0);
+      expect(var95).toBeCloseTo(-0.02, 5);
     });
   });
 
   describe('ES', () => {
-    it('should calculate Expected Shortfall', () => {
-      const returns = Array(100).fill(0).map((_, i) => (Math.random() - 0.5) * 0.02);
+    it('should calculate parametric Expected Shortfall', () => {
+      const returns = [-0.02, -0.015, -0.005, 0.01, 0.02, 0.03];
       const es95 = ES(returns, 0.95, 'parametric');
-      
+
       expect(es95).toBeLessThan(0);
-      expect(Math.abs(es95)).toBeGreaterThan(0);
+      expect(es95).toBeCloseTo(-0.0377, 4);
+    });
+
+    it('should calculate historical Expected Shortfall', () => {
+      const returns = [-0.02, -0.015, -0.005, 0.01, 0.02, 0.03];
+      const es95 = ES(returns, 0.95, 'historical');
+
+      expect(es95).toBeLessThan(0);
+      expect(es95).toBeCloseTo(-0.02, 5);
     });
   });
 });
@@ -167,17 +184,30 @@ describe('Performance Module', () => {
     it('should calculate all metrics at once', () => {
       const returns = [0.01, 0.02, -0.01, 0.015, 0.005];
       const metrics = calculateMetrics(returns, 0, 252);
-      
+
       expect(metrics).toHaveProperty('sharpe');
       expect(metrics).toHaveProperty('sortino');
       expect(metrics).toHaveProperty('calmar');
       expect(metrics).toHaveProperty('volatility');
       expect(metrics).toHaveProperty('downsideDeviation');
       expect(metrics).toHaveProperty('maxDrawdown');
-      
+      expect(metrics).toHaveProperty('annualizedReturn');
+      expect(metrics).toHaveProperty('cumulativeReturn');
+
       expect(Number.isFinite(metrics.sharpe)).toBe(true);
       expect(Number.isFinite(metrics.sortino)).toBe(true);
       expect(Number.isFinite(metrics.volatility)).toBe(true);
+      expect(Number.isFinite(metrics.annualizedReturn)).toBe(true);
+      expect(Number.isFinite(metrics.cumulativeReturn)).toBe(true);
+    });
+
+    it('should handle invalid inputs gracefully', () => {
+      const returns = [0.01, undefined, NaN, 0.02, null, 0.015];
+      const metrics = calculateMetrics(returns, 0, 252);
+
+      expect(metrics.sharpe).toBeGreaterThan(0);
+      expect(metrics.volatility).toBeGreaterThan(0);
+      expect(metrics.cumulativeReturn).toBeGreaterThan(0);
     });
   });
 });
