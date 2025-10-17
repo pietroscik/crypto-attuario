@@ -540,10 +540,10 @@ export default function PortfolioUtilities() {
                        'Max Sharpe'}
                     </h3>
 
-                    <div style={{ 
-                      display: 'grid', 
-                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', 
-                      gap: '1rem' 
+                    <div style={{
+                      display: 'grid',
+                      gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                      gap: '1rem'
                     }}>
                       <KpiCard
                         title="Sharpe Ratio"
@@ -562,12 +562,16 @@ export default function PortfolioUtilities() {
                         value={formatPercent(portfolios[strategy].maxDrawdown, 2, true)}
                       />
                       <KpiCard
-                        title="Rendimento Totale"
-                        value={formatPercent(portfolios[strategy].backtest.totalReturn, 2, true)}
+                        title="Downside Dev."
+                        value={formatPercent(portfolios[strategy].downsideDeviation, 2, true)}
                       />
                       <KpiCard
-                        title="Turnover Medio"
-                        value={formatPercent(portfolios[strategy].backtest.turnover, 2, true)}
+                        title="Rendimento Ann."
+                        value={formatPercent(portfolios[strategy].annualizedReturn, 2, true)}
+                      />
+                      <KpiCard
+                        title="Rendimento Totale"
+                        value={formatPercent(portfolios[strategy].cumulativeReturn, 2, true)}
                       />
                     </div>
                   </div>
@@ -649,6 +653,7 @@ export default function PortfolioUtilities() {
                       <div style={{ color: '#c0c0c0', fontSize: '0.9rem' }}>
                         <p>Valore Finale: ${portfolios[strategy].backtest.finalValue.toFixed(2)}</p>
                         <p>Numero Ribilanciamenti: {portfolios[strategy].backtest.rebalanceCount}</p>
+                        <p>Turnover Medio: {formatPercent(portfolios[strategy].backtest.turnover, 2, true)}</p>
                         <p>Turnover Totale: {formatPercent(portfolios[strategy].backtest.totalTurnover * 100, 2)}</p>
                       </div>
                     </div>
