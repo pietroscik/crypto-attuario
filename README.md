@@ -1,5 +1,7 @@
 Questo progetto [Next.js](https://nextjs.org) è stato creato con [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+> 🔬 **Stato**: Esplorazione sperimentale — AI applicata a critto-asset e valutazioni attuariali; proof of concept.
+
 ## Funzionalità
 
 ### 📊 Ranking Attuariale (integrazione DefiLlama)
@@ -41,7 +43,8 @@ Analisi di portafoglio complete con strategie di ottimizzazione multiple:
 - **3 strategie di ottimizzazione:** Equal Weight, Risk Parity, Max Sharpe Ratio
 - **Web Worker Optimization:** calcoli intensivi eseguiti in background per un'interfaccia reattiva
 - **Covariance Shrinkage:** riduzione stile Ledoit-Wolf (α 0-0,30, default 0,10) per maggiore stabilità
-- **Annualizzazione configurabile:** 252 giorni (tradizionale) o 365 (crypto 24/7)
+- **Annualizzazione configurabile:** 252 giorni (tradizionale)
+ o 365 (crypto 24/7)
 - **Metriche di rischio:** Sharpe, Sortino, Calmar, Volatilità, Max Drawdown, VaR, Expected Shortfall
 - **Backtesting:** walk-forward con ribilanciamento mensile
 - **Selezione asset:** scegli 2-10 asset crypto tra le principali opzioni
@@ -84,7 +87,8 @@ Esplora opportunità di rendimento DeFi da DeFiLlama:
 - **Yields multi-chain:** visualizza l'APY sulle principali chain
 - **Filtri:** chain, TVL minimo, età minima
 - **Indicatori di rischio:** avvisi su impermanent loss
-- **Caching:** TTL di 60 secondi per un recupero efficiente dei dati
+- **Caching:** TTL di 60 secondi per un rec
+upero efficiente dei dati
 - **Top 100:** rendering ottimizzato per le prime 100 opportunità
 - **Disclaimer educativo:** avvisi chiari sui rischi
 
@@ -137,7 +141,8 @@ Documentazione completa di formule, assunzioni e limitazioni:
 - Tentativi di retry (con backoff esponenziale)
 - Stati di errore
 
-**Rate Limiting:**
+**Rate
+ Limiting:**
 - Minimo 500 ms tra richieste allo stesso host
 - Previene il throttling delle API e garantisce un uso responsabile
 
@@ -224,6 +229,7 @@ Puoi anche visitare il [repository GitHub di Next.js](https://github.com/vercel/
 
 ## Deploy su Vercel
 
-Il modo più semplice per distribuire l'app è usare la [piattaforma Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme), sviluppata dagli autori di Next.js.
+Il modo più semplice per distribuire l'app è u
+sare la [piattaforma Vercel](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme), sviluppata dagli autori di Next.js.
 
 Consulta la [documentazione ufficiale sul deploy](https://nextjs.org/docs/app/building-your-application/deploying) per ulteriori dettagli.
